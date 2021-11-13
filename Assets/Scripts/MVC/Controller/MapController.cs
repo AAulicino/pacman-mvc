@@ -6,6 +6,7 @@ public class MapController
     readonly MapView view;
     readonly MapTileSpriteDatabase spriteDatabase;
 
+    CollectiblesManagerController collectibleController;
     PlayerController playerController;
     EnemyController enemyController;
 
@@ -30,6 +31,9 @@ public class MapController
                 view.SetTileSprite(new Vector2Int(x, y), spriteDatabase.GetSprite(model.Map[x, y]));
             }
         }
+
+        collectibleController = new CollectiblesManagerController(model.CollectiblesManager);
+        collectibleController.Initialize();
 
         playerController = new PlayerController(model.Player, PlayerViewFactory.Create());
 

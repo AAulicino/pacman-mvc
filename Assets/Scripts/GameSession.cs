@@ -26,11 +26,13 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             Resources.Load<TextAsset>("GameSettings").text
         );
 
-        PlayerModel player = new PlayerModel(map, this, actorSettings);
+        PlayerModel player = new PlayerModel(map, this, actorSettings, new InputWrapper());
+
         mapModel = new MapModel(
             map,
             player,
-            EnemyManagerFactory.Create(map, actorSettings, gameSettings, this, player)
+            EnemyManagerFactory.Create(map, actorSettings, gameSettings, this, player),
+            CollectiblesManagerModelFactory.Create(map)
         );
 
         mapController = new MapController(

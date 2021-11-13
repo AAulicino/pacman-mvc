@@ -43,9 +43,11 @@ public class EnemyModel : IEnemyModel
         float delta = 0;
         while (true)
         {
+            delta += Time.deltaTime;
             if (delta >= settings.MovementTime)
             {
                 delta = 0;
+                ai.Advance();
                 Move(ai.Direction);
             }
             yield return null;

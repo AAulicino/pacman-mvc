@@ -7,6 +7,7 @@ public interface IMapModel : IDisposable
     Tile[,] Map { get; }
     IPlayerModel Player { get; }
     IEnemyModel[] Enemies { get; }
+    ICollectiblesManagerModel CollectiblesManager { get; }
 
     void Initialize ();
 }

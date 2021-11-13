@@ -337,7 +337,7 @@ TextureImporter:
     second: SpriteSheet_110
   - first:
       213: -4881886091595114325
-    second: SpriteSheet_111
+    second: SpriteSHeet_0
   - first:
       213: -7912813274520506195
     second: SpriteSheet_112
@@ -427,7 +427,7 @@ TextureImporter:
     second: SpriteSheet_140
   - first:
       213: -169803676933302921
-    second: SpriteSheet_141
+    second: DefaultCollectible
   - first:
       213: 5626676942189501251
     second: SpriteSheet_142
@@ -451,7 +451,7 @@ TextureImporter:
     second: SpriteSheet_148
   - first:
       213: -3969464346736057863
-    second: SpriteSheet_149
+    second: PowerUpCollectible
   - first:
       213: 3788575541522960178
     second: SpriteSheet_150
@@ -697,7 +697,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 33.333332
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -3097,7 +3097,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_111
+      name: SpriteSHeet_0
       rect:
         serializedVersion: 2
         x: 411
@@ -3727,7 +3727,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_141
+      name: DefaultCollectible
       rect:
         serializedVersion: 2
         x: 414
@@ -3895,7 +3895,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_149
+      name: PowerUpCollectible
       rect:
         serializedVersion: 2
         x: 411

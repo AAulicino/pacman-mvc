@@ -13,7 +13,9 @@ public class EnemyManager : IEnemyManager
 
     public void Initialize ()
     {
-        Enemies.Initialize();
+        foreach (IEnemyModel enemy in enemies)
+            enemy.Enable();
+        enemyModeManager.Initialize();
     }
 
     public void TriggerFrightenedMode ()

@@ -15,15 +15,17 @@ public class PlayerModel : IPlayerModel
     readonly Tile[,] map;
     readonly ICoroutineRunner runner;
     readonly IActorSettings settings;
+    readonly IInput input;
 
     Coroutine moveCoroutine;
     Direction nextMovement;
 
-    public PlayerModel (Tile[,] map, ICoroutineRunner runner, IActorSettings settings)
+    public PlayerModel (Tile[,] map, ICoroutineRunner runner, IActorSettings settings, IInput input)
     {
         this.map = map;
         this.runner = runner;
         this.settings = settings;
+        this.input = input;
     }
 
     public void Enable ()
@@ -44,16 +46,16 @@ public class PlayerModel : IPlayerModel
         while (true)
         {
             delta += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (input.GetKey(KeyCode.UpArrow))
                 nextMovement = Direction.Up;
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            else if (input.GetKey(KeyCode.DownArrow))
                 nextMovement = Direction.Down;
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            else if (input.GetKey(KeyCode.LeftArrow))
                 nextMovement = Direction.Left;
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            else if (input.GetKey(KeyCode.RightArrow))
                 nextMovement = Direction.Right;
 
-            if (delta >= MovementTime)
+            if (delta >= settings.MovementTime)
             {
                 delta = 0;
                 Move(nextMovement);
@@ -106,6 +108,9 @@ public class PlayerModel : IPlayerModel
 
     public void Die ()
     {
-        throw new NotImplementedException();
+    }
+
+    public void PowerUp ()
+    {
     }
 }

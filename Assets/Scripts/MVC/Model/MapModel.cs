@@ -10,16 +10,24 @@ public class MapModel : IMapModel
     readonly IEnemyManager enemyManager;
     readonly bool[,] foodMap;
 
+    public ICollectiblesManagerModel CollectiblesManager { get; }
+
     public IPlayerModel Player { get; }
     public IEnemyModel[] Enemies => enemyManager.Enemies;
 
     public Tile[,] Map => map;
 
-    public MapModel (Tile[,] map, IPlayerModel player, IEnemyManager enemyManager)
+    public MapModel (
+        Tile[,] map,
+        IPlayerModel player,
+        IEnemyManager enemyManager,
+        ICollectiblesManagerModel collectiblesManager
+    )
     {
         this.map = map;
         this.Player = player;
         this.enemyManager = enemyManager;
+        CollectiblesManager = collectiblesManager;
         foodMap = new bool[map.GetLength(0), map.GetLength(1)];
 
         player.OnPositionChanged += HandlePlayerPositionChange;
@@ -29,6 +37,7 @@ public class MapModel : IMapModel
     {
         FillMapWithFood();
         Player.Enable();
+        enemyManager.Initialize();
     }
 
     void HandlePlayerPositionChange ()
@@ -39,9 +48,13 @@ public class MapModel : IMapModel
             return;
         }
 
-        if (foodMap[Player.Position.x, Player.Position.y])
+        if (CollectiblesManager.TryCollect(Player.Position, out CollectibleType type))
         {
-            foodMap[Player.Position.x, Player.Position.y] = false;
+            if (type == CollectibleType.PowerUp)
+            {
+                Player.PowerUp();
+                enemyManager.TriggerFrightenedMode();
+            }
             OnFoodCollected?.Invoke(Player.Position);
         }
     }

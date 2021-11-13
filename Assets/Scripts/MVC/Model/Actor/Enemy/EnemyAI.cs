@@ -13,6 +13,7 @@ public class EnemyAI : IEnemyAI
 
     Vector2Int[] path;
     int node;
+    EnemyAIMode currentMode;
 
     public EnemyAI (
         Vector2Int startingPosition,
@@ -34,7 +35,12 @@ public class EnemyAI : IEnemyAI
 
     public void Advance ()
     {
-        if (path == null)
+        if (currentMode != modeManager.ActiveMode)
+            RefreshPath();
+        else if (path == null || node == path.Length || modeManager.ActiveMode == EnemyAIMode.Chase)
+            RefreshPath();
+
+        if (path == null || path.Length == 0)
             return;
 
         Vector2Int previousPosition = Position;
@@ -51,10 +57,13 @@ public class EnemyAI : IEnemyAI
             Direction = Direction.Down;
     }
 
-    void HandleActiveModeChanged ()
+    void HandleActiveModeChanged () => RefreshPath();
+
+    void RefreshPath ()
     {
         path = behavior.GetAction(Position, modeManager.ActiveMode, target);
         node = 0;
+        currentMode = modeManager.ActiveMode;
     }
 
     public void Dispose ()

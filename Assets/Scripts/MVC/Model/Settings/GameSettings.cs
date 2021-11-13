@@ -5,10 +5,11 @@ using UnityEngine;
 [Serializable]
 public class GameSettings : IGameSettings
 {
-    [field: SerializeField]
-    public float ChaseDuration { get; private set; }
-    [field: SerializeField]
-    public float ScatterDuration { get; private set; }
-    [field: SerializeField]
-    public float FrightenedDuration { get; private set; }
+    [SerializeField] float chaseDuration;
+    [SerializeField] float scatterDuration;
+    [SerializeField] float frightenedDuration;
+
+    public float ChaseDuration => chaseDuration;
+    public float ScatterDuration => scatterDuration;
+    public float FrightenedDuration => frightenedDuration;
 }
