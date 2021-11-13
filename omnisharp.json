@@ -1,0 +1,6 @@
+{
+    "FormattingOptions": {
+        "SpacingAfterMethodDeclarationName": true,
+        "OrganizeImports": true
+    }
+}
