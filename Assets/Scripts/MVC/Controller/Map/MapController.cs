@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class MapController
+public class GameController
 {
-    readonly MapView view;
-    readonly IMapModel model;
+    readonly GameView view;
+    readonly IGameModel model;
     readonly MapTileSpriteDatabase spriteDatabase;
 
     CollectiblesManagerController collectibleController;
     PlayerController playerController;
     EnemyController enemyController;
 
-    public MapController (IMapModel model, MapView view, MapTileSpriteDatabase spriteDatabase)
+    public GameController (IGameModel model, GameView view, MapTileSpriteDatabase spriteDatabase)
     {
         this.model = model;
         this.view = view;
@@ -19,8 +19,8 @@ public class MapController
 
     public void Initialize ()
     {
-        int width = model.Map.GetLength(0);
-        int height = model.Map.GetLength(1);
+        int width = model.Map.Width;
+        int height = model.Map.Height;
 
         view.Initialize(new Vector2Int(width, height));
 

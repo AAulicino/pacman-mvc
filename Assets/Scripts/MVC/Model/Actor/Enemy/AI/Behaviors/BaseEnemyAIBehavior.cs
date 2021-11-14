@@ -6,23 +6,16 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
 {
     public abstract EnemyType EnemyType { get; }
 
-    protected readonly Tile[,] map;
+    protected readonly IMapModel map;
     protected readonly IPathFinder pathFinder;
-
-    protected readonly int mapWidth;
-    protected readonly int mapHeight;
-    protected readonly int mapMagnitude;
 
     protected readonly IRandomProvider random;
 
-    protected BaseEnemyAIBehavior (Tile[,] map, IPathFinder pathFinder, IRandomProvider random)
+    protected BaseEnemyAIBehavior (IMapModel map, IPathFinder pathFinder, IRandomProvider random)
     {
         this.map = map;
         this.pathFinder = pathFinder;
         this.random = random;
-        mapWidth = map.GetLength(0);
-        mapHeight = map.GetLength(1);
-        mapMagnitude = (int)Mathf.Sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
     }
 
     public abstract Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target);
@@ -32,36 +25,39 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
         return GetValidPositionCloseTo(position switch
         {
             ScatterPosition.TopLeft => new Vector2Int(
-                random.Range(0, mapWidth / 2),
-                random.Range(mapHeight / 2, mapHeight)
+                random.Range(0, map.Width / 2),
+                random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.TopRight => new Vector2Int(
-                random.Range(mapWidth / 2, mapWidth),
-                random.Range(mapHeight / 2, mapHeight)
+                random.Range(map.Width / 2, map.Width),
+                random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.BottomLeft => new Vector2Int(
-                random.Range(0, mapWidth / 2),
-                random.Range(0, mapHeight / 2)
+                random.Range(0, map.Width / 2),
+                random.Range(0, map.Height / 2)
             ),
             ScatterPosition.BottomRight => new Vector2Int(
-                random.Range(mapWidth / 2, mapWidth),
-                random.Range(0, mapHeight / 2)
+                random.Range(map.Width / 2, map.Width),
+                random.Range(0, map.Height / 2)
             ),
             _ => throw new NotImplementedException(),
         });
     }
+
+    protected Vector2Int[] FindPath (Vector2Int start, Vector2Int goal)
+        => pathFinder.FindPath(start, goal, TileExtensions.IsEnemyWalkable);
 
     protected Vector2Int GetValidPositionCloseTo (Vector2Int pos)
         => GetValidPositionCloseTo(pos, TileExtensions.IsEnemyWalkable);
 
     protected Vector2Int GetValidPositionCloseTo (Vector2Int pos, Func<Tile, bool> validTilePredicate)
     {
-        if (pos.x >= mapWidth)
-            return GetValidPositionCloseTo(new Vector2Int(mapWidth - 1, pos.y), validTilePredicate);
+        if (pos.x >= map.Width)
+            return GetValidPositionCloseTo(new Vector2Int(map.Width - 1, pos.y), validTilePredicate);
         else if (pos.x < 0)
             return GetValidPositionCloseTo(new Vector2Int(0, pos.y), validTilePredicate);
-        else if (pos.y >= mapHeight)
-            return GetValidPositionCloseTo(new Vector2Int(pos.x, mapHeight - 1), validTilePredicate);
+        else if (pos.y >= map.Height)
+            return GetValidPositionCloseTo(new Vector2Int(pos.x, map.Height - 1), validTilePredicate);
         else if (pos.y < 0)
             return GetValidPositionCloseTo(new Vector2Int(pos.x, 0), validTilePredicate);
 
@@ -99,31 +95,28 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
         int x = position.x;
         int y = position.y;
 
-        if (IsInBounds(x + 1, y))
+        if (map.InBounds(x + 1, y))
             yield return new Vector2Int(x + 1, y);
 
-        if (IsInBounds(x + 1, y + 1))
+        if (map.InBounds(x + 1, y + 1))
             yield return new Vector2Int(x + 1, y + 1);
 
-        if (IsInBounds(x + 1, y - 1))
+        if (map.InBounds(x + 1, y - 1))
             yield return new Vector2Int(x + 1, y - 1);
 
-        if (IsInBounds(x - 1, y))
+        if (map.InBounds(x - 1, y))
             yield return new Vector2Int(x - 1, y);
 
-        if (IsInBounds(x - 1, y - 1))
+        if (map.InBounds(x - 1, y - 1))
             yield return new Vector2Int(x - 1, y - 1);
 
-        if (IsInBounds(x - 1, y + 1))
+        if (map.InBounds(x - 1, y + 1))
             yield return new Vector2Int(x - 1, y + 1);
 
-        if (IsInBounds(x, y + 1))
+        if (map.InBounds(x, y + 1))
             yield return new Vector2Int(x, y + 1);
 
-        if (IsInBounds(x, y - 1))
+        if (map.InBounds(x, y - 1))
             yield return new Vector2Int(x, y - 1);
     }
-
-    protected bool IsInBounds (int x, int y)
-        => x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1);
 }

@@ -1,80 +1,48 @@
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapModel : IMapModel
 {
-    public event Action<Vector2Int> OnFoodCollected;
+    public Tile this[int x, int y] => map[x, y];
+    public Tile this[Vector2Int pos] => map[pos.x, pos.y];
+
+    public int Width { get; }
+    public int Height { get; }
+    public int Magnitude { get; }
+
+    public IReadOnlyList<Vector2Int> TeleportPositions { get; }
+    public IReadOnlyList<Vector2Int> EnemySpawnPoints { get; }
 
     readonly Tile[,] map;
-    readonly IEnemyManager enemyManager;
-    readonly bool[,] foodMap;
 
-    public ICollectiblesManagerModel CollectiblesManager { get; }
-
-    public IPlayerModel Player { get; }
-    public IEnemyModel[] Enemies => enemyManager.Enemies;
-
-    public Tile[,] Map => map;
-
-    public MapModel (
-        Tile[,] map,
-        IPlayerModel player,
-        IEnemyManager enemyManager,
-        ICollectiblesManagerModel collectiblesManager
-    )
+    public MapModel (Tile[,] map)
     {
         this.map = map;
-        this.Player = player;
-        this.enemyManager = enemyManager;
-        CollectiblesManager = collectiblesManager;
-        foodMap = new bool[map.GetLength(0), map.GetLength(1)];
+        Width = map.GetLength(0);
+        Height = map.GetLength(1);
 
-        player.OnPositionChanged += HandlePlayerPositionChange;
-    }
+        List<Vector2Int> teleportPositions = new List<Vector2Int>();
+        List<Vector2Int> enemySpawnPoints = new List<Vector2Int>();
 
-    public void Initialize ()
-    {
-        FillMapWithFood();
-        Player.Enable();
-        enemyManager.Initialize();
-    }
-
-    void HandlePlayerPositionChange ()
-    {
-        if (Enemies != null && Enemies.Any(x => x.Position == Player.Position))
+        for (int x = 0; x < Width; x++)
         {
-            Player.Die();
-            foreach (IEnemyModel enemy in Enemies)
-                enemy.Disable();
-            return;
-        }
-
-        if (CollectiblesManager.TryCollect(Player.Position, out CollectibleType type))
-        {
-            if (type == CollectibleType.PowerUp)
+            for (int y = 0; y < Height; y++)
             {
-                Player.PowerUp();
-                enemyManager.TriggerFrightenedMode();
+                Tile tile = map[x, y];
+                switch (tile)
+                {
+                    case Tile.Teleport: teleportPositions.Add(new Vector2Int(x, y)); break;
+                    case Tile.EnemySpawn: enemySpawnPoints.Add(new Vector2Int(x, y)); break;
+                }
             }
-            OnFoodCollected?.Invoke(Player.Position);
         }
+
+        TeleportPositions = teleportPositions;
+        EnemySpawnPoints = enemySpawnPoints;
+        Magnitude = (int)Mathf.Sqrt(Width * Width + Height * Height);
     }
 
-    void FillMapWithFood ()
-    {
-        int width = map.GetLength(0);
-        int height = map.GetLength(1);
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-                if (map[x, y] == Tile.Path)
-                    foodMap[x, y] = true;
-        }
-    }
+    public bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
 
-    public void Dispose ()
-    {
-        Player.OnPositionChanged -= HandlePlayerPositionChange;
-    }
+    public bool InBounds (int x, int y) => x > 0 && x < Width && y > 0 && y < Height;
 }

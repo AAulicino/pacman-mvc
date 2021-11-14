@@ -1,8 +1,11 @@
+using System;
 using NUnit.Framework;
 using UnityEngine;
 
 public class PathFinderTests
 {
+    readonly Func<Tile, bool> Walkable = x => x == Tile.Path;
+
     PathFinder pathFinder;
     Tile[,] tiles;
 
@@ -18,7 +21,7 @@ public class PathFinderTests
 
         pathFinder = new PathFinder(tiles);
 
-        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(2, 0), new Vector2Int(2, 2));
+        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(2, 0), new Vector2Int(2, 2), Walkable);
         Assert.AreEqual(new Vector2Int(1, 0), path[0]);
         Assert.AreEqual(new Vector2Int(0, 0), path[1]);
         Assert.AreEqual(new Vector2Int(0, 1), path[2]);
@@ -38,7 +41,7 @@ public class PathFinderTests
 
         pathFinder = new PathFinder(tiles);
 
-        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(1, 0), new Vector2Int(0, 1));
+        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(1, 0), new Vector2Int(0, 1), Walkable);
         Assert.AreEqual(new Vector2Int(0, 0), path[0]);
         Assert.AreEqual(new Vector2Int(0, 1), path[1]);
     }
@@ -54,7 +57,7 @@ public class PathFinderTests
 
         pathFinder = new PathFinder(tiles);
 
-        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(1, 0), new Vector2Int(0, 1));
+        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(1, 0), new Vector2Int(0, 1), Walkable);
         Assert.IsNull(path);
     }
 
@@ -68,7 +71,7 @@ public class PathFinderTests
 
         pathFinder = new PathFinder(tiles);
 
-        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(0, 0), new Vector2Int(0, 2));
+        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(0, 0), new Vector2Int(0, 2), Walkable);
         Assert.IsNull(path);
     }
 
@@ -85,7 +88,7 @@ public class PathFinderTests
 
         pathFinder = new PathFinder(tiles);
 
-        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(2, 0), new Vector2Int(1, 2));
+        Vector2Int[] path = pathFinder.FindPath(new Vector2Int(2, 0), new Vector2Int(1, 2), Walkable);
         Assert.AreEqual(new Vector2Int(2, 1), path[0]);
         Assert.AreEqual(new Vector2Int(2, 2), path[1]);
         Assert.AreEqual(new Vector2Int(1, 2), path[2]);

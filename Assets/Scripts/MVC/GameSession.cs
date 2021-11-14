@@ -3,10 +3,10 @@ using UnityEngine;
 public class GameSession : MonoBehaviour, ICoroutineRunner
 {
     [SerializeField] ContentFitterCamera contentCamera;
-    [SerializeField] MapView mapView;
+    [SerializeField] GameView mapView;
 
-    IMapModel mapModel;
-    MapController mapController;
+    IGameModel gameModel;
+    GameController mapController;
 
     [RuntimeInitializeOnLoadMethod]
     static void InitializeOnLoad ()
@@ -16,8 +16,6 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
     void Awake ()
     {
-        Tile[,] map = LoadMap(0);
-
         IActorSettings actorSettings = JsonUtility.FromJson<ActorSettings>(
             Resources.Load<TextAsset>("Settings/ActorSettings").text
         );
@@ -30,6 +28,9 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             Resources.Load<TextAsset>("Settings/EnemiesBehaviorSettings").text
         );
 
+        Tile[,] tiles = LoadMap(0);
+        IMapModel map = new MapModel(tiles);
+
         PlayerModel player = new PlayerModel(
             map,
             this,
@@ -40,10 +41,11 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
         ICollectiblesManagerModel collectiblesManager = CollectiblesManagerModelFactory.Create(map);
 
-        mapModel = new MapModel(
+        gameModel = new GameModel(
             map,
             player,
             EnemyManagerFactory.Create(
+                new PathFinder(tiles),
                 map,
                 actorSettings,
                 gameSettings,
@@ -55,14 +57,14 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             collectiblesManager
         );
 
-        mapController = new MapController(
-            mapModel,
+        mapController = new GameController(
+            gameModel,
             mapView,
             Resources.Load<MapTileSpriteDatabase>("Databases/MapTileSpriteDatabase")
         );
 
         mapController.Initialize();
-        mapModel.Initialize();
+        gameModel.Initialize();
 
         const float TILE_PIVOT_OFFSET = 0.5f; //center
 
@@ -70,8 +72,8 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             new CameraViewContent(
                 new Vector3(-TILE_PIVOT_OFFSET, -TILE_PIVOT_OFFSET, 0),
                 new Vector3(
-                    map.GetLength(0) - TILE_PIVOT_OFFSET,
-                    map.GetLength(1) - TILE_PIVOT_OFFSET,
+                    map.Width - TILE_PIVOT_OFFSET,
+                    map.Height - TILE_PIVOT_OFFSET,
                     0
                 )
             )

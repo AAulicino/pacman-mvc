@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class EnemyManagerFactory
 {
     public static IEnemyManager Create (
-        Tile[,] map,
+        IPathFinder pathFinder,
+        IMapModel map,
         IActorSettings actorSettings,
         IGameSettings gameSettings,
         ICoroutineRunner runner,
@@ -14,19 +14,8 @@ public static class EnemyManagerFactory
     )
     {
         IRandomProvider random = RandomProvider.Instance;
-        List<Vector2Int> startingPositions = new List<Vector2Int>();
-
-        for (int x = 0; x < map.GetLength(0); x++)
-        {
-            for (int y = 0; y < map.GetLength(1); y++)
-            {
-                if (map[x, y] == Tile.EnemySpawn)
-                    startingPositions.Add(new Vector2Int(x, y));
-            }
-        }
 
         IEnemyAIModeManagerModel enemyModeManager = new EnemyAIModeManagerModel(runner, gameSettings);
-        PathFinder pathFinder = new PathFinder(map);
 
         IEnemyModel blinky = CreateEnemyModel(
             new BlinkyBehavior(map, pathFinder, random, settings.Blinky)
@@ -50,7 +39,7 @@ public static class EnemyManagerFactory
         {
             return new EnemyModel(
                 new EnemyAI(
-                    startingPositions[Random.Range(0, startingPositions.Count)],
+                    map.EnemySpawnPoints[Random.Range(0, map.EnemySpawnPoints.Count)],
                     enemyModeManager,
                     target,
                     behavior

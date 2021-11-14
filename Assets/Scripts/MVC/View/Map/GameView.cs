@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapView : MonoBehaviour
+public class GameView : MonoBehaviour
 {
     [SerializeField] SpriteRenderer tilePrefab;
 

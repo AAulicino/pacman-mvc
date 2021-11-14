@@ -6,7 +6,7 @@ public class PinkyBehavior : BaseEnemyAIBehavior
     readonly IPinkySettings settings;
 
     public PinkyBehavior (
-        Tile[,] map,
+        IMapModel map,
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
         IPinkySettings settings
@@ -27,7 +27,7 @@ public class PinkyBehavior : BaseEnemyAIBehavior
     }
 
     Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => pathFinder.FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
+        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
@@ -35,14 +35,14 @@ public class PinkyBehavior : BaseEnemyAIBehavior
         leadingPosition += target.DirectionVector * settings.LeadingTilesAheadOfPacman;
 
         if (target.Direction == Direction.Up)
-            leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug :)
+            leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug
 
-        return pathFinder.FindPath(position, GetValidPositionCloseTo(leadingPosition));
+        return FindPath(position, GetValidPositionCloseTo(leadingPosition));
     }
 
     Vector2Int[] GetFrightenedAction (Vector2Int position, IActorModel target)
     {
-        Vector2Int fleeDirection = (position - target.Position) * mapMagnitude;
-        return pathFinder.FindPath(position, fleeDirection);
+        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
+        return FindPath(position, fleeDirection);
     }
 }

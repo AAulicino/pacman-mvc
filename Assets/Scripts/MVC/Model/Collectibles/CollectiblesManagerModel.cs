@@ -14,11 +14,11 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
     readonly Dictionary<Vector2Int, ICollectibleModel> collectibles =
         new Dictionary<Vector2Int, ICollectibleModel>();
 
-    public CollectiblesManagerModel (Tile[,] map, ICollectibleModelFactory collectibleFactory)
+    public CollectiblesManagerModel (IMapModel map, ICollectibleModelFactory collectibleFactory)
     {
-        for (int x = 0; x < map.GetLength(0); x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.GetLength(1); y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 Tile tile = map[x, y];
                 if (tile == Tile.Path)

@@ -5,30 +5,44 @@ using UnityEngine;
 public class PathFinder : IPathFinder
 {
     readonly Tile[,] map;
+    readonly int width;
+    readonly int height;
 
     public PathFinder (Tile[,] map)
     {
         this.map = map;
+        width = map.GetLength(0);
+        height = map.GetLength(1);
     }
 
-    public Vector2Int[] FindPath (Vector2Int start, Vector2Int goal)
-        => FindPath(new Node(start, GetTile(start)), new Node(goal, GetTile(goal)));
-
-    Tile GetTile (Vector2Int position) => map[position.x, position.y];
-
-    Vector2Int[] FindPath (Node start, Node end)
+    public Vector2Int[] FindPath (
+        Vector2Int start,
+        Vector2Int goal,
+        Func<Tile, bool> walkablePredicate
+    )
     {
-        List<Node> open = new List<Node>();
+        NodeFactory nodeFactory = new NodeFactory(walkablePredicate);
+        return FindPath(
+            nodeFactory.Create(start, map[start.x, start.y]),
+            nodeFactory.Create(goal, map[start.x, start.y]),
+            nodeFactory
+        );
+    }
+
+    Vector2Int[] FindPath (Node start, Node end, NodeFactory nodeFactory)
+    {
+        HashSet<Node> open = new HashSet<Node>();
         HashSet<Node> closed = new HashSet<Node>();
         open.Add(start);
 
         while (open.Count > 0)
         {
-            Node current = open[0];
-            for (int i = 1; i < open.Count; i++)
+            Node current = null;
+
+            foreach (Node node in open)
             {
-                if (open[i].Cost < current.Cost)
-                    current = open[i];
+                if (current == null || node.Cost < current.Cost)
+                    current = node;
             }
 
             open.Remove(current);
@@ -37,7 +51,7 @@ public class PathFinder : IPathFinder
             if (current.Equals(end))
                 return RetracePath(start, current);
 
-            foreach (Node neighbor in GetNeighbors(current))
+            foreach (Node neighbor in GetNeighbors(current, nodeFactory))
             {
                 if (!neighbor.Walkable || closed.Contains(neighbor))
                     continue;
@@ -63,30 +77,28 @@ public class PathFinder : IPathFinder
             + Mathf.Abs(neighbor.Position.y - end.Position.y);
     }
 
-    IEnumerable<Node> GetNeighbors (Node node)
+    IEnumerable<Node> GetNeighbors (Node node, NodeFactory nodeFactory)
     {
-        int x = node.Position.x + 1;
+        int x = node.Position.x;
         int y = node.Position.y;
 
-        if (IsInBounds(x, y))
-            yield return new Node(new Vector2Int(x, y), map[x, y]);
+        if (IsInBounds(x + 1, y))
+            yield return CreateNode(x + 1, y, nodeFactory);
 
-        x = node.Position.x - 1;
-        if (IsInBounds(x, y))
-            yield return new Node(new Vector2Int(x, y), map[x, y]);
+        if (IsInBounds(x - 1, y))
+            yield return CreateNode(x - 1, y, nodeFactory);
 
-        x = node.Position.x;
-        y = node.Position.y + 1;
-        if (IsInBounds(x, y))
-            yield return new Node(new Vector2Int(x, y), map[x, y]);
+        if (IsInBounds(x, y + 1))
+            yield return CreateNode(x, y + 1, nodeFactory);
 
-        y = node.Position.y - 1;
-        if (IsInBounds(x, y))
-            yield return new Node(new Vector2Int(x, y), map[x, y]);
+        if (IsInBounds(x, y - 1))
+            yield return CreateNode(x, y - 1, nodeFactory);
     }
 
-    bool IsInBounds (int x, int y)
-        => x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1);
+    bool IsInBounds (int x, int y) => x >= 0 && x < width && y >= 0 && y < height;
+
+    Node CreateNode (int x, int y, NodeFactory nodeFactory)
+        => nodeFactory.Create(new Vector2Int(x, y), map[x, y]);
 
     Vector2Int[] RetracePath (Node start, Node end)
     {
@@ -102,10 +114,25 @@ public class PathFinder : IPathFinder
         return path;
     }
 
+    class NodeFactory
+    {
+        readonly Func<Tile, bool> walkablePredicate;
+
+        public NodeFactory (Func<Tile, bool> walkablePredicate)
+        {
+            this.walkablePredicate = walkablePredicate;
+        }
+
+        public Node Create (Vector2Int location, Tile tile)
+        {
+            return new Node(location, walkablePredicate(tile));
+        }
+    }
+
     class Node : IEquatable<Node>
     {
         public Vector2Int Position { get; }
-        public bool Walkable => tile.IsEnemyWalkable();
+        public bool Walkable { get; }
 
         public int PathLength { get; set; }
         public int StraightLineLength { get; set; }
@@ -113,12 +140,10 @@ public class PathFinder : IPathFinder
 
         public Node Parent { get; set; }
 
-        readonly Tile tile;
-
-        public Node (Vector2Int location, Tile tile)
+        public Node (Vector2Int location, bool walkable)
         {
             Position = location;
-            this.tile = tile;
+            Walkable = walkable;
         }
 
         public bool Equals (Node other) => other.Position == Position;

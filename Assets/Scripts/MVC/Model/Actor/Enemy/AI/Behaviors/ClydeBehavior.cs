@@ -10,7 +10,7 @@ public class ClydeBehavior : BaseEnemyAIBehavior
     readonly int sqrChaseDistance;
 
     public ClydeBehavior (
-        Tile[,] map,
+        IMapModel map,
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
         ICollectiblesManagerModel collectiblesManager,
@@ -31,7 +31,7 @@ public class ClydeBehavior : BaseEnemyAIBehavior
         if (ratio < settings.CollectedRequirementRatio)
         {
             Vector2Int randomPos = new Vector2Int(position.x + Random.Range(-3, 4), position.y);
-            return pathFinder.FindPath(
+            return FindPath(
                 position,
                 GetValidPositionCloseTo(randomPos, x => x == Tile.EnemySpawn)
             );
@@ -47,19 +47,19 @@ public class ClydeBehavior : BaseEnemyAIBehavior
     }
 
     Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => pathFinder.FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
+        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
         if ((target.Position - position).sqrMagnitude > sqrChaseDistance)
-            return pathFinder.FindPath(position, target.Position);
+            return FindPath(position, target.Position);
 
         return GetScatterAction(position, target);
     }
 
     Vector2Int[] GetFrightenedAction (Vector2Int position, IActorModel target)
     {
-        Vector2Int fleeDirection = (position - target.Position) * mapMagnitude;
-        return pathFinder.FindPath(position, fleeDirection);
+        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
+        return FindPath(position, fleeDirection);
     }
 }

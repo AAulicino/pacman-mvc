@@ -1,13 +1,18 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMapModel : IDisposable
+public interface IMapModel
 {
-    event Action<Vector2Int> OnFoodCollected;
-    Tile[,] Map { get; }
-    IPlayerModel Player { get; }
-    IEnemyModel[] Enemies { get; }
-    ICollectiblesManagerModel CollectiblesManager { get; }
+    Tile this[Vector2Int pos] { get; }
+    Tile this[int x, int y] { get; }
 
-    void Initialize ();
+    int Width { get; }
+    int Height { get; }
+    int Magnitude { get; }
+
+    IReadOnlyList<Vector2Int> TeleportPositions { get; }
+    IReadOnlyList<Vector2Int> EnemySpawnPoints { get; }
+
+    bool InBounds (Vector2Int position);
+    bool InBounds (int x, int y);
 }

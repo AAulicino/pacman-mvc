@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerModel : IPlayerModel
 {
+    public event Action OnTeleport;
     public event Action OnPositionChanged;
     public event Action OnDirectionChanged;
     public event Action<bool> OnEnableChange;
@@ -15,7 +16,7 @@ public class PlayerModel : IPlayerModel
 
     public float MovementTime => settings.MovementTime;
 
-    readonly Tile[,] map;
+    readonly IMapModel map;
     readonly ICoroutineRunner runner;
     readonly IActorSettings settings;
     readonly IInputProvider input;
@@ -25,7 +26,7 @@ public class PlayerModel : IPlayerModel
     Direction nextMovement;
 
     public PlayerModel (
-        Tile[,] map,
+        IMapModel map,
         ICoroutineRunner runner,
         IActorSettings settings,
         IInputProvider input,
@@ -99,16 +100,17 @@ public class PlayerModel : IPlayerModel
             OnDirectionChanged?.Invoke();
         }
 
+        if (map[newPosition] == Tile.Teleport)
+        {
+            Debug.Log("TODO");
+        }
+
         Position = newPosition;
         OnPositionChanged?.Invoke();
     }
 
     bool IsMovementValid (Vector2Int position)
-    {
-        return position.x > 0 && position.x < map.GetLength(0)
-            && position.y > 0 && position.y < map.GetLength(1)
-            && map[position.x, position.y].IsPlayerWalkable();
-    }
+        => map.InBounds(position) && map[position].IsPlayerWalkable();
 
     Vector2Int GetMovementDirection (Direction direction)
     {

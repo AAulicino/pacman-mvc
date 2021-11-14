@@ -9,7 +9,7 @@ public class InkyBehavior : BaseEnemyAIBehavior
     readonly ICollectiblesManagerModel collectiblesManager;
 
     public InkyBehavior (
-        Tile[,] map,
+        IMapModel map,
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
         ICollectiblesManagerModel collectiblesManager,
@@ -27,7 +27,7 @@ public class InkyBehavior : BaseEnemyAIBehavior
         if (collectiblesManager.CollectedCount < settings.CollectedRequirement)
         {
             Vector2Int randomPos = new Vector2Int(position.x + Random.Range(-3, 4), position.y);
-            return pathFinder.FindPath(
+            return FindPath(
                 position,
                 GetValidPositionCloseTo(randomPos, x => x == Tile.EnemySpawn)
             );
@@ -43,7 +43,7 @@ public class InkyBehavior : BaseEnemyAIBehavior
     }
 
     Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => pathFinder.FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
+        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
@@ -51,15 +51,15 @@ public class InkyBehavior : BaseEnemyAIBehavior
         leadingPosition += target.DirectionVector * settings.LeadingTilesAheadOfPacman;
 
         if (target.Direction == Direction.Up)
-            leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug :)
+            leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug
 
         leadingPosition += (leadingPosition - blinky.Position) * 2;
-        return pathFinder.FindPath(position, GetValidPositionCloseTo(leadingPosition));
+        return FindPath(position, GetValidPositionCloseTo(leadingPosition));
     }
 
     Vector2Int[] GetFrightenedAction (Vector2Int position, IActorModel target)
     {
-        Vector2Int fleeDirection = (position - target.Position) * mapMagnitude;
-        return pathFinder.FindPath(position, fleeDirection);
+        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
+        return FindPath(position, fleeDirection);
     }
 }
