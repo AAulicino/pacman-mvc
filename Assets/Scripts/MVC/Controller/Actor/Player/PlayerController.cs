@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerController : ActorController
 {
     readonly IPlayerModel model;
@@ -7,5 +9,14 @@ public class PlayerController : ActorController
     {
         this.model = model;
         this.view = view;
+
+        model.OnTeleport += HandleTeleport;
+    }
+
+    void HandleTeleport ()
+    {
+        originPosition = model.Position;
+        targetPosition = model.Position;
+        view.transform.position = (Vector2)model.Position;
     }
 }

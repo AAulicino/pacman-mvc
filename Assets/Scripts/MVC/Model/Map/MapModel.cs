@@ -12,6 +12,7 @@ public class MapModel : IMapModel
 
     public IReadOnlyList<Vector2Int> TeleportPositions { get; }
     public IReadOnlyList<Vector2Int> EnemySpawnPoints { get; }
+    public Vector2Int PlayerSpawnPoint { get; }
 
     readonly Tile[,] map;
 
@@ -33,6 +34,7 @@ public class MapModel : IMapModel
                 {
                     case Tile.Teleport: teleportPositions.Add(new Vector2Int(x, y)); break;
                     case Tile.EnemySpawn: enemySpawnPoints.Add(new Vector2Int(x, y)); break;
+                    case Tile.PlayerSpawn: PlayerSpawnPoint = new Vector2Int(x, y); break;
                 }
             }
         }
@@ -44,5 +46,5 @@ public class MapModel : IMapModel
 
     public bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
 
-    public bool InBounds (int x, int y) => x > 0 && x < Width && y > 0 && y < Height;
+    public bool InBounds (int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;
 }

@@ -100,5 +100,6 @@ public class EnemyModel : IEnemyModel
 
     public void Die ()
     {
+        ai.Die();
     }
 }

@@ -23,7 +23,8 @@ public class PlayerModel : IPlayerModel
     readonly ITimeProvider time;
 
     Coroutine moveCoroutine;
-    Direction nextMovement;
+    Direction nextMovement = Direction.Left;
+    bool skipWait;
 
     public PlayerModel (
         IMapModel map,
@@ -38,6 +39,8 @@ public class PlayerModel : IPlayerModel
         this.settings = settings;
         this.input = input;
         this.time = timeProvider;
+
+        Position = map.PlayerSpawnPoint;
     }
 
     public void Enable ()
@@ -68,9 +71,10 @@ public class PlayerModel : IPlayerModel
             else if (input.GetKey(KeyCode.RightArrow))
                 nextMovement = Direction.Right;
 
-            if (delta >= settings.MovementTime)
+            if (skipWait || delta >= settings.MovementTime)
             {
                 delta = 0;
+                skipWait = false;
                 Move(nextMovement);
             }
             yield return null;
@@ -93,16 +97,12 @@ public class PlayerModel : IPlayerModel
                 return;
         }
 
-        if (Direction != nextMovement)
-        {
-            Direction = nextMovement;
-            DirectionVector = movementDirectionVector;
-            OnDirectionChanged?.Invoke();
-        }
+        HandleDirection(movementDirectionVector);
 
-        if (map[newPosition] == Tile.Teleport)
+        if (HandleTeleport(newPosition))
         {
-            Debug.Log("TODO");
+            skipWait = true;
+            return;
         }
 
         Position = newPosition;
@@ -126,10 +126,38 @@ public class PlayerModel : IPlayerModel
 
     public void Die ()
     {
+        Disable();
     }
 
     public void PowerUp ()
     {
         HasPowerUp = true;
+    }
+
+    void HandleDirection (Vector2Int movementDirectionVector)
+    {
+        if (Direction != nextMovement)
+        {
+            Direction = nextMovement;
+            DirectionVector = movementDirectionVector;
+            OnDirectionChanged?.Invoke();
+        }
+    }
+
+    bool HandleTeleport (Vector2Int position)
+    {
+        if (map[position] == Tile.Teleport)
+        {
+            foreach (Vector2Int pos in map.TeleportPositions)
+            {
+                if (pos != position)
+                {
+                    Position = pos;
+                    OnTeleport?.Invoke();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

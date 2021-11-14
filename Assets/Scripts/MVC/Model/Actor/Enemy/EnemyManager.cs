@@ -1,5 +1,9 @@
+using System;
+
 public class EnemyManager : IEnemyManager
 {
+    public event Action<IEnemyModel> OnEnemyPositionChanged;
+
     public IEnemyModel[] Enemies => enemies;
 
     readonly IEnemyModel[] enemies;
@@ -9,12 +13,16 @@ public class EnemyManager : IEnemyManager
     {
         this.enemies = enemies;
         this.enemyModeManager = enemyModeManager;
+
     }
 
     public void Initialize ()
     {
         foreach (IEnemyModel enemy in enemies)
+        {
+            enemy.OnPositionChanged += () => OnEnemyPositionChanged(enemy);
             enemy.Enable();
+        }
         enemyModeManager.Initialize();
     }
 

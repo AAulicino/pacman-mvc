@@ -74,8 +74,7 @@ public class EnemyAI : IEnemyAI
         currentMode = modeManager.ActiveMode;
     }
 
-    public void Dispose ()
+    public void Die ()
     {
-        modeManager.OnActiveModeChanged -= HandleActiveModeChanged;
     }
 }

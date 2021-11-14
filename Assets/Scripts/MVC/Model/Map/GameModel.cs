@@ -27,6 +27,7 @@ public class GameModel : IGameModel
         CollectiblesManager = collectiblesManager;
 
         player.OnPositionChanged += HandlePlayerPositionChange;
+        enemyManager.OnEnemyPositionChanged += HandlePositionChanged;
     }
 
     public void Initialize ()
@@ -39,9 +40,7 @@ public class GameModel : IGameModel
     {
         if (Enemies != null && Enemies.Any(x => x.Position == Player.Position))
         {
-            Player.Die();
-            foreach (IEnemyModel enemy in Enemies)
-                enemy.Disable();
+            EndGame();
             return;
         }
 
@@ -54,6 +53,19 @@ public class GameModel : IGameModel
             }
             OnFoodCollected?.Invoke(Player.Position);
         }
+    }
+
+    void HandlePositionChanged (IEnemyModel enemy)
+    {
+        if (enemy.Position == Player.Position)
+            EndGame();
+    }
+
+    void EndGame ()
+    {
+        Player.Die();
+        foreach (IEnemyModel enemy in Enemies)
+            enemy.Disable();
     }
 
     public void Dispose ()

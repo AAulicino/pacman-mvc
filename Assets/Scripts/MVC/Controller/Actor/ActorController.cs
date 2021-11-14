@@ -7,8 +7,8 @@ public class ActorController
     readonly IActorModel model;
     readonly ActorView view;
 
-    Vector2 targetPosition;
-    Vector2 originPosition;
+    protected Vector2 targetPosition;
+    protected Vector2 originPosition;
     float delta;
 
     readonly Quaternion up = Quaternion.Euler(new Vector3(0, 0, 90));
@@ -22,6 +22,8 @@ public class ActorController
         this.view = view;
 
         originPosition = model.Position;
+        targetPosition = originPosition;
+        view.transform.position = originPosition;
 
         model.OnPositionChanged += HandlePositionChanged;
         model.OnDirectionChanged += HandleDirectionChanged;
