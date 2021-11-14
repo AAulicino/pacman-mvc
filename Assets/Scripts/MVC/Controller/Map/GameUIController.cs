@@ -1,4 +1,7 @@
-public class GameUIController
+using System;
+using Object = UnityEngine.Object;
+
+public class GameUIController : IDisposable
 {
     readonly IGameModel model;
     readonly GameUIView uiView;
@@ -6,24 +9,11 @@ public class GameUIController
     public GameUIController (IGameModel model, GameUIView uiView)
     {
         this.model = model;
-
-        model.OnGameEnded += HandleGameEnded;
-        uiView.OnClick += HandleUIViewClick;
-
-        uiView.SetGameEndMessageActive(false);
-        uiView.gameObject.SetActive(true);
+        this.uiView = uiView;
     }
 
-    void HandleGameEnded (bool victory)
+    public void Dispose ()
     {
-        uiView.SertEndGameMessageText(victory ? "Victory" : "Defeat");
-        uiView.SetGameEndMessageActive(true);
-        uiView.SetStartGameUIActive(true);
-    }
-
-    void HandleUIViewClick ()
-    {
-        uiView.gameObject.SetActive(false);
-        model.StartGame();
+        Object.Destroy(uiView.gameObject);
     }
 }

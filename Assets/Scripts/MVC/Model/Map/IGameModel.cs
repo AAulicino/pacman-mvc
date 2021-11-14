@@ -1,14 +1,13 @@
 using System;
-using UnityEngine;
 
 public interface IGameModel : IDisposable
 {
+    event Action<bool> OnGameEnded;
+
     IMapModel Map { get; }
     IPlayerModel Player { get; }
     IEnemyModel[] Enemies { get; }
     ICollectiblesManagerModel CollectiblesManager { get; }
-
-    event Action<bool> OnGameEnded;
 
     void StartGame ();
 }

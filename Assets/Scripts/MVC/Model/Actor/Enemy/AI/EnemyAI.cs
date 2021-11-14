@@ -43,7 +43,7 @@ public class EnemyAI : IEnemyAI
 
     public void Advance ()
     {
-        if (currentMode != modeManager.ActiveMode)
+        if (currentMode != EnemyAIMode.Dead && currentMode != modeManager.ActiveMode)
             RefreshPath();
         else if (path == null || node == path.Length || modeManager.ActiveMode == EnemyAIMode.Chase)
             RefreshPath();
@@ -76,5 +76,8 @@ public class EnemyAI : IEnemyAI
 
     public void Die ()
     {
+        currentMode = EnemyAIMode.Dead;
+        path = behavior.GetAction(Position, currentMode, target);
+        node = 0;
     }
 }

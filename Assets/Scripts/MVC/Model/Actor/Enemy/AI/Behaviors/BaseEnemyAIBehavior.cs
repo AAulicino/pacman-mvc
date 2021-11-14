@@ -20,6 +20,18 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
 
     public abstract Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target);
 
+    protected Vector2Int[] GetDefaultDeadAction (Vector2Int position, IActorModel target)
+    {
+        int rnd = random.Range(0, map.EnemySpawnPoints.Count);
+        return FindPath(position, map.EnemySpawnPoints[rnd]);
+    }
+
+    protected Vector2Int[] GetDefaultFrightenedAction (Vector2Int position, IActorModel target)
+    {
+        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
+        return FindPath(position, fleeDirection);
+    }
+
     protected Vector2Int GetRandomScatterPosition (ScatterPosition position)
     {
         return GetValidPositionCloseTo(position switch

@@ -22,7 +22,8 @@ public class BlinkyBehavior : BaseEnemyAIBehavior
         {
             EnemyAIMode.Scatter => GetScatterAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
-            EnemyAIMode.Frightened => GetFrightenedAction(position, target),
+            EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
+            EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
             _ => throw new System.NotImplementedException()
         };
     }
@@ -32,10 +33,4 @@ public class BlinkyBehavior : BaseEnemyAIBehavior
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
         => FindPath(position, target.Position);
-
-    Vector2Int[] GetFrightenedAction (Vector2Int position, IActorModel target)
-    {
-        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
-        return FindPath(position, fleeDirection);
-    }
 }

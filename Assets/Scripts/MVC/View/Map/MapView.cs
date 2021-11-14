@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapView : MonoBehaviour
+public class MapView : MonoBehaviour, IDisposable
 {
     [SerializeField] SpriteRenderer tilePrefab;
 
@@ -25,4 +26,11 @@ public class MapView : MonoBehaviour
 
     public void SetTileSprite (Vector2Int position, Sprite sprite)
         => tiles[position].sprite = sprite;
+
+    public void Dispose ()
+    {
+        foreach (SpriteRenderer tile in tiles.Values)
+            Destroy(tile.gameObject);
+        tiles.Clear();
+    }
 }

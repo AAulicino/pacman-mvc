@@ -21,7 +21,8 @@ public class PinkyBehavior : BaseEnemyAIBehavior
         {
             EnemyAIMode.Scatter => GetScatterAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
-            EnemyAIMode.Frightened => GetFrightenedAction(position, target),
+            EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
+            EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
             _ => throw new System.NotImplementedException()
         };
     }
@@ -38,11 +39,5 @@ public class PinkyBehavior : BaseEnemyAIBehavior
             leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug
 
         return FindPath(position, GetValidPositionCloseTo(leadingPosition));
-    }
-
-    Vector2Int[] GetFrightenedAction (Vector2Int position, IActorModel target)
-    {
-        Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
-        return FindPath(position, fleeDirection);
     }
 }

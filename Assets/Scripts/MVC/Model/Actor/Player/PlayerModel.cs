@@ -160,4 +160,9 @@ public class PlayerModel : IPlayerModel
         }
         return false;
     }
+
+    public void Dispose ()
+    {
+        Disable();
+    }
 }

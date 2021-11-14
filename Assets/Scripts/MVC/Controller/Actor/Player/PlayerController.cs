@@ -19,4 +19,10 @@ public class PlayerController : ActorController
         targetPosition = model.Position;
         view.transform.position = (Vector2)model.Position;
     }
+
+    public override void Dispose ()
+    {
+        model.OnTeleport -= HandleTeleport;
+        base.Dispose();
+    }
 }

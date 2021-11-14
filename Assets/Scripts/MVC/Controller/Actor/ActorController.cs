@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class ActorController
+public class ActorController : IDisposable
 {
     readonly IActorModel model;
     readonly ActorView view;
@@ -72,5 +73,14 @@ public class ActorController
             view.transform.localScale = new Vector3(-1, 1, 1);
         else
             view.transform.localScale = new Vector3(1, 1, 1);
+    }
+
+    public virtual void Dispose ()
+    {
+        model.OnPositionChanged -= HandlePositionChanged;
+        model.OnDirectionChanged -= HandleDirectionChanged;
+        model.OnEnableChange -= HandleEnableChange;
+
+        Object.Destroy(view.gameObject);
     }
 }

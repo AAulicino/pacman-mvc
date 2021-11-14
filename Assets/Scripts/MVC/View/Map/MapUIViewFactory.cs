@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public static class MapUIViewFactory
+public static class GameUIViewFactory
 {
-    public static MapUIView Create ()
+    public static GameUIView Create ()
     {
-        return Object.Instantiate(Resources.Load<MapUIView>("MapUIView"));
+        return Object.Instantiate(Resources.Load<GameUIView>("GameUIView"));
     }
 }

@@ -102,4 +102,9 @@ public class EnemyModel : IEnemyModel
     {
         ai.Die();
     }
+
+    public void Dispose ()
+    {
+        Disable();
+    }
 }

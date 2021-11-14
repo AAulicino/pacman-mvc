@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class CollectiblesManagerController : IDisposable
 {
@@ -35,6 +34,9 @@ public class CollectiblesManagerController : IDisposable
 
     public void Dispose ()
     {
-        throw new NotImplementedException();
+        model.OnCollect -= HandleCollectibleCollected;
+        foreach (CollectibleController controller in collectibles.Values)
+            controller.Dispose();
+        collectibles.Clear();
     }
 }

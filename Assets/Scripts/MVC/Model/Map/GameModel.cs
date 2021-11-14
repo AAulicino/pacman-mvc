@@ -93,7 +93,7 @@ public class GameModel : IGameModel
     {
         Player.OnPositionChanged -= HandlePlayerPositionChange;
         Player.Dispose();
-        Enemies.ForEach(x => x.Dispose());
-        Map.Dispose();
+        foreach (IEnemyModel enemy in Enemies)
+            enemy.Dispose();
     }
 }

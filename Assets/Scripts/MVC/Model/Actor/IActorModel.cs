@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public interface IActorModel
+public interface IActorModel : IDisposable
 {
     event Action OnPositionChanged;
     event Action OnDirectionChanged;
