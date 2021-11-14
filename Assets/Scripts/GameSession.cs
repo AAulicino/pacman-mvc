@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GameSession : MonoBehaviour, ICoroutineRunner
 {
+    [SerializeField] ContentFitterCamera camera;
+
     IMapModel mapModel;
     MapController mapController;
     MapView mapView;
@@ -9,7 +11,7 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
     [RuntimeInitializeOnLoadMethod]
     static void InitializeOnLoad ()
     {
-        new GameObject("GameSession", typeof(GameSession));
+        Instantiate(Resources.Load<GameSession>("GameSession"));
     }
 
     void Awake ()
@@ -19,15 +21,15 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
         Tile[,] map = LoadMap(0);
 
         IActorSettings actorSettings = JsonUtility.FromJson<ActorSettings>(
-            Resources.Load<TextAsset>("ActorSettings").text
+            Resources.Load<TextAsset>("Settings/ActorSettings").text
         );
 
         IGameSettings gameSettings = JsonUtility.FromJson<GameSettings>(
-            Resources.Load<TextAsset>("GameSettings").text
+            Resources.Load<TextAsset>("Settings/GameSettings").text
         );
 
         IEnemiesBehaviorSettings enemiesSettings = JsonUtility.FromJson<EnemiesBehaviorSettings>(
-            Resources.Load<TextAsset>("EnemiesBehaviorSettings").text
+            Resources.Load<TextAsset>("Settings/EnemiesBehaviorSettings").text
         );
 
         PlayerModel player = new PlayerModel(
@@ -63,6 +65,19 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
         mapController.Initialize();
         mapModel.Initialize();
+
+        const float TILE_PIVOT_OFFSET = 0.5f; //center
+
+        camera.SetViewContent(
+            new CameraViewContent(
+                new Vector3(-TILE_PIVOT_OFFSET, -TILE_PIVOT_OFFSET, 0),
+                new Vector3(
+                    map.GetLength(0) - TILE_PIVOT_OFFSET,
+                    map.GetLength(1) - TILE_PIVOT_OFFSET,
+                    0
+                )
+            )
+        );
     }
 
     Tile[,] LoadMap (int mapId)

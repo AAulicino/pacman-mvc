@@ -1,0 +1,19 @@
+{
+    "blinky": {
+        "scatterPosition": 0
+    },
+    "pinky": {
+        "scatterPosition": 1,
+        "leadingTilesAheadOfPacman": 2
+    },
+    "inky": {
+        "scatterPosition": 2,
+        "leadingTilesAheadOfPacman": 1,
+        "collectedRequirement": 30
+    },
+    "clyde": {
+        "scatterPosition": 3,
+        "collectedRequirementRatio": 0.3,
+        "disableChaseDistance": 4
+    }
+}
