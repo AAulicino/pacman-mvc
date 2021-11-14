@@ -1,0 +1,19 @@
+{
+    "name": "Pacman.Tests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:74dd582340bba42aa87df24ef50924ba",
+        "GUID:63e5d02e1abfa419dbbb3ce0a641a716"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

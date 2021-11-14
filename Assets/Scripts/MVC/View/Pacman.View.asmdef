@@ -1,0 +1,16 @@
+{
+    "name": "Pacman.View",
+    "rootNamespace": "",
+    "references": [
+        "GUID:74dd582340bba42aa87df24ef50924ba"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

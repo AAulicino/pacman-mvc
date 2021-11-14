@@ -1,0 +1,18 @@
+{
+    "name": "Pacman.Controller",
+    "rootNamespace": "",
+    "references": [
+        "GUID:74dd582340bba42aa87df24ef50924ba",
+        "GUID:63e5d02e1abfa419dbbb3ce0a641a716",
+        "GUID:3fa969fef69fb45db84d653c0c1f8917"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
