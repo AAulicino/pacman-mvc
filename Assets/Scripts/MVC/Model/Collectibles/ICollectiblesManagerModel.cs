@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface ICollectiblesManagerModel
 {
+    event Action OnAllCollectiblesCollected;
     event Action<ICollectibleModel> OnCollect;
 
     ICollection<ICollectibleModel> Collectibles { get; }

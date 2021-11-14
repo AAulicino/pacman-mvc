@@ -6,7 +6,7 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
     [SerializeField] GameView mapView;
 
     IGameModel gameModel;
-    GameController mapController;
+    GameUIController mapUIController;
 
     [RuntimeInitializeOnLoadMethod]
     static void InitializeOnLoad ()
@@ -57,14 +57,16 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             collectiblesManager
         );
 
-        mapController = new GameController(
+        GameController gameController = new GameController(
             gameModel,
             mapView,
             Resources.Load<MapTileSpriteDatabase>("Databases/MapTileSpriteDatabase")
         );
 
-        mapController.Initialize();
-        gameModel.Initialize();
+        new GameUIController(gameModel, MapUIViewFactory.Create());
+
+        gameController.Initialize();
+        gameModel.StartGame();
 
         const float TILE_PIVOT_OFFSET = 0.5f; //center
 

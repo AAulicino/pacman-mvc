@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class CollectiblesManagerController
+public class CollectiblesManagerController : IDisposable
 {
     readonly ICollectiblesManagerModel model;
     readonly Dictionary<Vector2Int, CollectibleController> collectibles;
@@ -29,5 +31,10 @@ public class CollectiblesManagerController
         CollectibleController controller = collectibles[model.Position];
         controller.Destroy();
         collectibles.Remove(model.Position);
+    }
+
+    public void Dispose ()
+    {
+        throw new NotImplementedException();
     }
 }

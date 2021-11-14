@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
-using UnityEngine;
 
 public class GameModel : IGameModel
 {
-    public event Action<Vector2Int> OnFoodCollected;
+    public event Action<bool> OnGameEnded;
 
     readonly IEnemyManager enemyManager;
 
@@ -27,10 +26,11 @@ public class GameModel : IGameModel
         CollectiblesManager = collectiblesManager;
 
         player.OnPositionChanged += HandlePlayerPositionChange;
-        enemyManager.OnEnemyPositionChanged += HandlePositionChanged;
+        enemyManager.OnEnemyPositionChanged += HandleEnemyPositionChanged;
+        CollectiblesManager.OnAllCollectiblesCollected += HandleAllCollectiblesCollected;
     }
 
-    public void Initialize ()
+    public void StartGame ()
     {
         Player.Enable();
         enemyManager.Initialize();
@@ -38,12 +38,21 @@ public class GameModel : IGameModel
 
     void HandlePlayerPositionChange ()
     {
+        EvaluatePlayerCollision();
+        EvaluateCollectibles();
+    }
+
+    void EvaluatePlayerCollision ()
+    {
         if (Enemies != null && Enemies.Any(x => x.Position == Player.Position))
         {
-            EndGame();
+            KillPlayer();
             return;
         }
+    }
 
+    void EvaluateCollectibles ()
+    {
         if (CollectiblesManager.TryCollect(Player.Position, out CollectibleType type))
         {
             if (type == CollectibleType.PowerUp)
@@ -51,19 +60,31 @@ public class GameModel : IGameModel
                 Player.PowerUp();
                 enemyManager.TriggerFrightenedMode();
             }
-            OnFoodCollected?.Invoke(Player.Position);
         }
     }
 
-    void HandlePositionChanged (IEnemyModel enemy)
+    void HandleEnemyPositionChanged (IEnemyModel enemy)
     {
         if (enemy.Position == Player.Position)
-            EndGame();
+            KillPlayer();
     }
 
-    void EndGame ()
+    void KillPlayer ()
     {
         Player.Die();
+        DisableEnemies();
+        OnGameEnded?.Invoke(false);
+    }
+
+    void HandleAllCollectiblesCollected ()
+    {
+        Player.Disable();
+        DisableEnemies();
+        OnGameEnded?.Invoke(true);
+    }
+
+    void DisableEnemies ()
+    {
         foreach (IEnemyModel enemy in Enemies)
             enemy.Disable();
     }
@@ -71,5 +92,8 @@ public class GameModel : IGameModel
     public void Dispose ()
     {
         Player.OnPositionChanged -= HandlePlayerPositionChange;
+        Player.Dispose();
+        Enemies.ForEach(x => x.Dispose());
+        Map.Dispose();
     }
 }

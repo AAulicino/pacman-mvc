@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CollectiblesManagerModel : ICollectiblesManagerModel
 {
+    public event Action OnAllCollectiblesCollected;
     public event Action<ICollectibleModel> OnCollect;
 
     public int TotalCollectibles { get; }
@@ -40,13 +41,21 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
     {
         if (collectibles.TryGetValue(position, out ICollectibleModel collectible))
         {
-            collectibles.Remove(position);
             type = collectible.Type;
-            CollectedCount++;
-            OnCollect?.Invoke(collectible);
+            HandleCollectibleCollected(collectible);
             return true;
         }
         type = default;
         return false;
+    }
+
+    void HandleCollectibleCollected (ICollectibleModel collectible)
+    {
+        collectibles.Remove(collectible.Position);
+        CollectedCount++;
+        OnCollect?.Invoke(collectible);
+
+        if (CollectedCount == TotalCollectibles)
+            OnAllCollectiblesCollected?.Invoke();
     }
 }

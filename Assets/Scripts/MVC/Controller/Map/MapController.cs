@@ -1,16 +1,14 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class GameController
+public class MapController : IDisposable
 {
-    readonly GameView view;
-    readonly IGameModel model;
+    readonly IMapModel model;
+    readonly MapView view;
     readonly MapTileSpriteDatabase spriteDatabase;
 
-    CollectiblesManagerController collectibleController;
-    PlayerController playerController;
-    EnemyController enemyController;
-
-    public GameController (IGameModel model, GameView view, MapTileSpriteDatabase spriteDatabase)
+    public MapController (IMapModel model, MapView view, MapTileSpriteDatabase spriteDatabase)
     {
         this.model = model;
         this.view = view;
@@ -19,25 +17,20 @@ public class GameController
 
     public void Initialize ()
     {
-        int width = model.Map.Width;
-        int height = model.Map.Height;
+        int width = model.Width;
+        int height = model.Height;
 
         view.Initialize(new Vector2Int(width, height));
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
-            {
-                view.SetTileSprite(new Vector2Int(x, y), spriteDatabase.GetSprite(model.Map[x, y]));
-            }
+                view.SetTileSprite(new Vector2Int(x, y), spriteDatabase.GetSprite(model[x, y]));
         }
+    }
 
-        collectibleController = new CollectiblesManagerController(model.CollectiblesManager);
-        collectibleController.Initialize();
-
-        playerController = new PlayerController(model.Player, PlayerViewFactory.Create());
-
-        foreach (IEnemyModel enemy in model.Enemies)
-            enemyController = new EnemyController(enemy, EnemyViewFactory.Create(enemy.EnemyType));
+    public void Dispose ()
+    {
+        Object.Destroy(view.gameObject);
     }
 }
