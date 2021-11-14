@@ -9,7 +9,10 @@ public class PlayerModel : IPlayerModel
     public event Action<bool> OnEnableChange;
 
     public Vector2Int Position { get; private set; } = Vector2Int.one;
+    public Vector2Int DirectionVector { get; private set; }
     public Direction Direction { get; private set; }
+    public bool HasPowerUp { get; private set; }
+
     public float MovementTime => settings.MovementTime;
 
     readonly Tile[,] map;
@@ -66,13 +69,16 @@ public class PlayerModel : IPlayerModel
 
     void Move (Direction direction)
     {
-        Vector2Int newPosition = Position + GetMovementDirection(direction);
+        Vector2Int movementDirectionVector = GetMovementDirection(direction);
+        Vector2Int newPosition = Position + movementDirectionVector;
 
         if (!IsMovementValid(newPosition))
         {
             // preserve previous direction if direction change not valid
             nextMovement = Direction;
-            newPosition = Position + GetMovementDirection(Direction);
+            movementDirectionVector = GetMovementDirection(Direction);
+            newPosition = Position + movementDirectionVector;
+
             if (!IsMovementValid(newPosition))
                 return;
         }
@@ -80,6 +86,7 @@ public class PlayerModel : IPlayerModel
         if (Direction != nextMovement)
         {
             Direction = nextMovement;
+            DirectionVector = movementDirectionVector;
             OnDirectionChanged?.Invoke();
         }
 
@@ -112,5 +119,6 @@ public class PlayerModel : IPlayerModel
 
     public void PowerUp ()
     {
+        HasPowerUp = true;
     }
 }

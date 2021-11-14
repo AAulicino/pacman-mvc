@@ -37,13 +37,13 @@ TextureImporter:
     second: Blinky00
   - first:
       213: 3929453942698372637
-    second: SpriteSheet_11
+    second: Pinky00
   - first:
       213: 8058879627694289943
-    second: SpriteSheet_12
+    second: Inky00
   - first:
       213: 6833624519701456044
-    second: SpriteSheet_13
+    second: Clyde00
   - first:
       213: 4050273695720440628
     second: PacMan0
@@ -997,7 +997,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_11
+      name: Pinky00
       rect:
         serializedVersion: 2
         x: 701
@@ -1018,7 +1018,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_12
+      name: Inky00
       rect:
         serializedVersion: 2
         x: 751
@@ -1039,7 +1039,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_13
+      name: Clyde00
       rect:
         serializedVersion: 2
         x: 801

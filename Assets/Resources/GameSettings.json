@@ -1,5 +1,5 @@
 {
-    "chaseDuration": 5,
-    "scatterDuration": 5,
-    "frightenedDuration": 5
+    "chaseDuration": 20,
+    "scatterDuration": 7,
+    "frightenedDuration": 10
 }

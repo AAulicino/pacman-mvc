@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,19 +27,22 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
     public abstract Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target);
 
     protected Vector2Int GetValidPositionCloseTo (Vector2Int pos)
+        => GetValidPositionCloseTo(pos, TileExtensions.IsEnemyWalkable);
+
+    protected Vector2Int GetValidPositionCloseTo (Vector2Int pos, Func<Tile, bool> validTilePredicate)
     {
-        if (pos.x > mapWidth)
-            return GetValidPositionCloseTo(new Vector2Int(mapWidth - 1, pos.y));
+        if (pos.x >= mapWidth)
+            return GetValidPositionCloseTo(new Vector2Int(mapWidth - 1, pos.y), validTilePredicate);
         else if (pos.x < 0)
-            return GetValidPositionCloseTo(new Vector2Int(0, pos.y));
-        else if (pos.y > mapHeight)
-            return GetValidPositionCloseTo(new Vector2Int(pos.x, mapHeight - 1));
+            return GetValidPositionCloseTo(new Vector2Int(0, pos.y), validTilePredicate);
+        else if (pos.y >= mapHeight)
+            return GetValidPositionCloseTo(new Vector2Int(pos.x, mapHeight - 1), validTilePredicate);
         else if (pos.y < 0)
-            return GetValidPositionCloseTo(new Vector2Int(pos.x, 0));
+            return GetValidPositionCloseTo(new Vector2Int(pos.x, 0), validTilePredicate);
 
         Tile startTile = map[pos.x, pos.y];
 
-        if (startTile.IsEnemyWalkable())
+        if (validTilePredicate(startTile))
             return pos;
 
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -54,7 +58,7 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
 
             foreach (Vector2Int neighbor in GetValidMapNeighbors(currentPos))
             {
-                if (map[neighbor.x, neighbor.y].IsEnemyWalkable())
+                if (validTilePredicate(map[neighbor.x, neighbor.y]))
                     return neighbor;
 
                 if (!visited.Contains(neighbor))
@@ -95,6 +99,6 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
             yield return new Vector2Int(x, y - 1);
     }
 
-    bool IsInBounds (int x, int y)
+    protected bool IsInBounds (int x, int y)
         => x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1);
 }

@@ -6,6 +6,9 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
 {
     public event Action<ICollectibleModel> OnCollect;
 
+    public int TotalCollectibles { get; }
+    public int CollectedCount { get; private set; }
+
     public ICollection<ICollectibleModel> Collectibles => collectibles.Values;
 
     readonly Dictionary<Vector2Int, ICollectibleModel> collectibles =
@@ -30,6 +33,7 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
                 }
             }
         }
+        TotalCollectibles = collectibles.Count;
     }
 
     public bool TryCollect (Vector2Int position, out CollectibleType type)
@@ -38,6 +42,7 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
         {
             collectibles.Remove(position);
             type = collectible.Type;
+            CollectedCount++;
             OnCollect?.Invoke(collectible);
             return true;
         }

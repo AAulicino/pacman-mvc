@@ -8,7 +8,8 @@ public static class EnemyManagerFactory
         IActorSettings actorSettings,
         IGameSettings gameSettings,
         ICoroutineRunner runner,
-        IActorModel target
+        IActorModel target,
+        ICollectiblesManagerModel collectiblesManager
     )
     {
         List<Vector2Int> startingPositions = new List<Vector2Int>();
@@ -25,17 +26,30 @@ public static class EnemyManagerFactory
         IEnemyAIModeManagerModel enemyModeManager = new EnemyAIModeManagerModel(runner, gameSettings);
         PathFinder pathFinder = new PathFinder(map);
 
-        IEnemyModel blinky = new EnemyModel(
-            new EnemyAI(
-                startingPositions[Random.Range(0, startingPositions.Count)],
-                enemyModeManager,
-                target,
-                new BlinkyBehavior(map, pathFinder)
-            ),
-            actorSettings,
-            runner
+        IEnemyModel blinky = CreateEnemyModel(new BlinkyBehavior(map, pathFinder));
+
+        IEnemyModel pinky = CreateEnemyModel(new PinkyBehavior(map, pathFinder));
+
+        IEnemyModel inky = CreateEnemyModel(
+            new InkyBehavior(map, pathFinder, blinky, collectiblesManager)
         );
 
-        return new EnemyManager(enemyModeManager, blinky);
+        IEnemyModel clyde = CreateEnemyModel(new ClydeBehavior(map, pathFinder, collectiblesManager));
+
+        return new EnemyManager(enemyModeManager, blinky, pinky, inky, clyde);
+
+        IEnemyModel CreateEnemyModel (IEnemyAIBehavior behavior)
+        {
+            return new EnemyModel(
+                new EnemyAI(
+                    startingPositions[Random.Range(0, startingPositions.Count)],
+                    enemyModeManager,
+                    target,
+                    behavior
+                ),
+                actorSettings,
+                runner
+            );
+        }
     }
 }

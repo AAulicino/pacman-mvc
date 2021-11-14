@@ -1,4 +1,7 @@
 public enum EnemyType
 {
-    Blinky
+    Blinky,
+    Pinky,
+    Inky,
+    Clyde
 }

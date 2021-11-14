@@ -9,6 +9,8 @@ public class EnemyModel : IEnemyModel
     public event Action<bool> OnEnableChange;
 
     public Vector2Int Position => ai.Position;
+    public Vector2Int DirectionVector { get; private set; }
+
     public Direction Direction { get; private set; }
 
     public EnemyType EnemyType => ai.EnemyType;
@@ -19,11 +21,16 @@ public class EnemyModel : IEnemyModel
     readonly ICoroutineRunner runner;
     Coroutine moveCoroutine;
 
+    float moveTime;
+
     public EnemyModel (IEnemyAI ai, IActorSettings settings, ICoroutineRunner runner)
     {
         this.ai = ai;
         this.settings = settings;
         this.runner = runner;
+
+        ai.OnActiveModeChanged += HandleActiveModeChanged;
+        HandleActiveModeChanged();
     }
 
     public void Enable ()
@@ -38,13 +45,23 @@ public class EnemyModel : IEnemyModel
             runner.StopCoroutine(moveCoroutine);
     }
 
+    void HandleActiveModeChanged ()
+    {
+        if (ai.ActiveMode == EnemyAIMode.Frightened)
+            moveTime = settings.FrightenedMoveTime;
+        else
+            moveTime = settings.MovementTime;
+    }
+
     IEnumerator MoveRoutine ()
     {
         float delta = 0;
         while (true)
         {
             delta += Time.deltaTime;
-            if (delta >= settings.MovementTime)
+
+
+            if (delta >= moveTime)
             {
                 delta = 0;
                 ai.Advance();
@@ -56,11 +73,13 @@ public class EnemyModel : IEnemyModel
 
     void Move (Direction direction)
     {
-        Vector2Int newPosition = Position + GetMovementDirection(Direction);
+        Vector2Int movementDirectionVector = GetMovementDirection(Direction);
+        Vector2Int newPosition = Position + movementDirectionVector;
 
         if (Direction != direction)
         {
             Direction = direction;
+            DirectionVector = movementDirectionVector;
             OnDirectionChanged?.Invoke();
         }
 

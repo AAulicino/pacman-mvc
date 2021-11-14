@@ -45,6 +45,8 @@ public class MapModel : IMapModel
         if (Enemies != null && Enemies.Any(x => x.Position == Player.Position))
         {
             Player.Die();
+            foreach (IEnemyModel enemy in Enemies)
+                enemy.Disable();
             return;
         }
 

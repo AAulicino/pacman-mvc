@@ -15,10 +15,10 @@ public class MapView : MonoBehaviour
         {
             for (int y = 0; y < dimension.y; y++)
             {
-                tiles.Add(
-                    new Vector2Int(x, y),
-                    Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform)
-                );
+                SpriteRenderer tile =
+                    Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+                tile.name = $"Tile {x},{y}";
+                tiles.Add(new Vector2Int(x, y), tile);
             }
         }
     }

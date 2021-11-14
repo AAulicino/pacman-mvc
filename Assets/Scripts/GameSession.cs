@@ -28,11 +28,20 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
         PlayerModel player = new PlayerModel(map, this, actorSettings, new InputWrapper());
 
+        ICollectiblesManagerModel collectiblesManager = CollectiblesManagerModelFactory.Create(map);
+
         mapModel = new MapModel(
             map,
             player,
-            EnemyManagerFactory.Create(map, actorSettings, gameSettings, this, player),
-            CollectiblesManagerModelFactory.Create(map)
+            EnemyManagerFactory.Create(
+                map,
+                actorSettings,
+                gameSettings,
+                this,
+                player,
+                collectiblesManager
+            ),
+            collectiblesManager
         );
 
         mapController = new MapController(

@@ -1,11 +1,19 @@
+using System;
 using UnityEngine;
 
 public class EnemyAI : IEnemyAI
 {
+    public event Action OnActiveModeChanged
+    {
+        add => modeManager.OnActiveModeChanged += value;
+        remove => modeManager.OnActiveModeChanged -= value;
+    }
+
     public EnemyType EnemyType => behavior.EnemyType;
 
     public Vector2Int Position { get; private set; }
     public Direction Direction { get; private set; }
+    public EnemyAIMode ActiveMode => modeManager.ActiveMode;
 
     readonly IEnemyAIModeManagerModel modeManager;
     readonly IActorModel target;

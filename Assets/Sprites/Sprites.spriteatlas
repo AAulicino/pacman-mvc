@@ -80,12 +80,9 @@ SpriteAtlas:
   - {fileID: 692916972302859487, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7043133548349567394, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 357286527779173287, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 6833624519701456044, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7575490143863281063, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 8058879627694289943, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -5901355953262395968, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 5626676942189501251, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 3929453942698372637, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 6335360754331110017, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 3222232815831790375, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -2812676215503841580, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -146,6 +143,7 @@ SpriteAtlas:
   - {fileID: 5430743998967427626, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -6855937049084916964, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -6614553410548192088, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 3929453942698372637, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -3969464346736057863, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -1552155774418116299, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 6292078881015857177, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -248,6 +246,8 @@ SpriteAtlas:
   - {fileID: -4556197565260342421, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -2764029711273647405, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -4881886091595114325, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 6833624519701456044, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 8058879627694289943, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 626035762396133777, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 5199191754792244096, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 8509693838206513423, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -300,12 +300,9 @@ SpriteAtlas:
   - SpriteSheet_155
   - SpriteSheet_124
   - SpriteSheet_140
-  - SpriteSheet_13
   - SpriteSheet_143
-  - SpriteSheet_12
   - SpriteSheet_158
   - SpriteSheet_142
-  - SpriteSheet_11
   - SpriteSheet_75
   - SpriteSheet_129
   - SpriteSheet_159
@@ -366,6 +363,7 @@ SpriteAtlas:
   - SpriteSheet_94
   - PacMan02
   - PacMan01
+  - Pinky00
   - PowerUpCollectible
   - SpriteSheet_181
   - SpriteSheet_180
@@ -468,6 +466,8 @@ SpriteAtlas:
   - SpriteSheet_8
   - SpriteSheet_9
   - SpriteSHeet_0
+  - Clyde00
+  - Inky00
   - SpriteSheet_202
   - SpriteSheet_203
   - SpriteSheet_200

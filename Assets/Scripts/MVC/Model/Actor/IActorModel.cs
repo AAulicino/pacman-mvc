@@ -8,9 +8,12 @@ public interface IActorModel
     event Action<bool> OnEnableChange;
 
     Vector2Int Position { get; }
+    Vector2Int DirectionVector { get; }
+
     Direction Direction { get; }
     float MovementTime { get; }
 
     void Enable ();
+    void Disable ();
     void Die ();
 }
