@@ -30,7 +30,7 @@ public class GameModel : IGameModel
         CollectiblesManager.OnAllCollectiblesCollected += HandleAllCollectiblesCollected;
     }
 
-    public void StartGame ()
+    public void Initialize ()
     {
         Player.Enable();
         enemyManager.Initialize();

@@ -14,13 +14,13 @@ public class CollectiblesManagerController : IDisposable
         model.OnCollect += HandleCollectibleCollected;
     }
 
-    public void Initialize ()
+    public void Initialize (Transform parent)
     {
         foreach (ICollectibleModel model in model.Collectibles)
         {
             collectibles.Add(
                 model.Position,
-                new CollectibleController(model, CollectibleViewFactory.Create(model.Type)
+                new CollectibleController(model, CollectibleViewFactory.Create(model.Type, parent)
             ));
         }
     }

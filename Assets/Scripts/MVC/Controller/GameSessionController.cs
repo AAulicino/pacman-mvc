@@ -4,6 +4,8 @@ public class GameSessionController
     readonly GameSessionView view;
     readonly MapTileSpriteDatabase tileSpriteDatabase;
 
+    GameController gameController;
+
     public GameSessionController (
         IGameSessionModel model,
         GameSessionView view,
@@ -15,16 +17,23 @@ public class GameSessionController
         this.tileSpriteDatabase = tileSpriteDatabase;
 
         model.OnGameStart += HandleGameStart;
+        model.OnGameEnded += HandleGameEnd;
     }
 
     void HandleGameStart ()
     {
-        GameController gameController = new GameController(
+        gameController = new GameController(
             model.GameModel,
-            view.GameView,
-            tileSpriteDatabase
+            GameSessionViewFactory.Create(),
+            tileSpriteDatabase,
+            view.ContentCamera
         );
 
         gameController.Initialize();
+    }
+
+    void HandleGameEnd (bool _)
+    {
+        gameController.Dispose();
     }
 }

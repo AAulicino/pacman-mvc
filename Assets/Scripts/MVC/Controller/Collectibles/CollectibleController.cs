@@ -13,6 +13,7 @@ public class CollectibleController : IDisposable
         this.view = view;
 
         view.transform.position = (Vector2)model.Position;
+        view.name = model.Type + " " + model.Position.ToString();
     }
 
     public void Destroy ()

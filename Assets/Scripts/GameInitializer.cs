@@ -30,7 +30,8 @@ public static class GameInitializer
 
         uiController = new GameSessionUIController(
             model,
-            Resources.Load<GameSessionUIView>("GameSessionUIView")
+            view,
+            Object.Instantiate(Resources.Load<GameSessionUIView>("GameSessionUIView"))
         );
 
         uiController.Initialize();

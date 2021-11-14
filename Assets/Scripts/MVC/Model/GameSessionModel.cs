@@ -29,6 +29,7 @@ public class GameSessionModel : IGameSessionModel
         GameModel.OnGameEnded += HandleGameEnded;
 
         OnGameStart?.Invoke();
+        GameModel.Initialize();
     }
 
     void HandleGameEnded (bool victory) => OnGameEnded?.Invoke(victory);

@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class ContentFitterCamera : MonoBehaviour
 {
-    [SerializeField] new Camera camera;
+    [field: SerializeField]
+    public Camera Camera { get; private set; }
 
     public void SetViewContent (ICameraViewContent content)
     {
@@ -15,14 +16,14 @@ public class ContentFitterCamera : MonoBehaviour
         Vector3 pos = content.Bounds.center;
 
         if (screenRatio >= targetRatio)
-            camera.orthographicSize = orthoSize;
+            Camera.orthographicSize = orthoSize;
         else
         {
             float differenceInSize = targetRatio / screenRatio;
-            camera.orthographicSize = orthoSize * differenceInSize;
+            Camera.orthographicSize = orthoSize * differenceInSize;
         }
 
-        camera.transform.localPosition = Vector3.zero;
+        Camera.transform.localPosition = Vector3.zero;
         transform.position = pos;
     }
 }

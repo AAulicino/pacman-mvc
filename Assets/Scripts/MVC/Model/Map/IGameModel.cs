@@ -9,5 +9,5 @@ public interface IGameModel : IDisposable
     IEnemyModel[] Enemies { get; }
     ICollectiblesManagerModel CollectiblesManager { get; }
 
-    void StartGame ();
+    void Initialize ();
 }
