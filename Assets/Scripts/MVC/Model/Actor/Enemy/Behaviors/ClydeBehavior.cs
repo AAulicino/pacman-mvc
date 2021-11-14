@@ -2,20 +2,25 @@ using UnityEngine;
 
 public class ClydeBehavior : BaseEnemyAIBehavior
 {
-    const float COLLECTED_REQUIREMENT_RATIO = 0.3f;
-    const int SQR_DISABLE_CHASE_DISTANCE = 4 * 4;
-
     public override EnemyType EnemyType => EnemyType.Clyde;
 
     readonly ICollectiblesManagerModel collectiblesManager;
+    readonly IClydeSettings settings;
+
+    readonly int sqrChaseDistance;
 
     public ClydeBehavior (
         Tile[,] map,
         IPathFinder pathFinder,
-        ICollectiblesManagerModel collectiblesManager
-    ) : base(map, pathFinder)
+        IRandomProvider randomProvider,
+        ICollectiblesManagerModel collectiblesManager,
+        IClydeSettings settings
+
+    ) : base(map, pathFinder, randomProvider)
     {
         this.collectiblesManager = collectiblesManager;
+        this.settings = settings;
+        sqrChaseDistance = settings.DisableChaseDistance * settings.DisableChaseDistance;
     }
 
     public override Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target)
@@ -23,7 +28,7 @@ public class ClydeBehavior : BaseEnemyAIBehavior
         float ratio = collectiblesManager.CollectedCount
             / (float)collectiblesManager.TotalCollectibles;
 
-        if (ratio < COLLECTED_REQUIREMENT_RATIO)
+        if (ratio < settings.CollectedRequirementRatio)
         {
             Vector2Int randomPos = new Vector2Int(position.x + Random.Range(-3, 4), position.y);
             return pathFinder.FindPath(
@@ -42,18 +47,11 @@ public class ClydeBehavior : BaseEnemyAIBehavior
     }
 
     Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-    {
-        Vector2Int bottomLeftArea = new Vector2Int(
-            Random.Range(0, mapWidth / 2),
-            Random.Range(0, mapHeight / 2)
-        );
-
-        return pathFinder.FindPath(position, bottomLeftArea);
-    }
+        => pathFinder.FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
-        if ((target.Position - position).sqrMagnitude > SQR_DISABLE_CHASE_DISTANCE)
+        if ((target.Position - position).sqrMagnitude > sqrChaseDistance)
             return pathFinder.FindPath(position, target.Position);
 
         return GetScatterAction(position, target);

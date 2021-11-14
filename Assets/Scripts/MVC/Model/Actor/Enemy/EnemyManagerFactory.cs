@@ -9,9 +9,11 @@ public static class EnemyManagerFactory
         IGameSettings gameSettings,
         ICoroutineRunner runner,
         IActorModel target,
-        ICollectiblesManagerModel collectiblesManager
+        ICollectiblesManagerModel collectiblesManager,
+        IEnemiesBehaviorSettings settings
     )
     {
+        IRandomProvider random = RandomProvider.Instance;
         List<Vector2Int> startingPositions = new List<Vector2Int>();
 
         for (int x = 0; x < map.GetLength(0); x++)
@@ -26,15 +28,21 @@ public static class EnemyManagerFactory
         IEnemyAIModeManagerModel enemyModeManager = new EnemyAIModeManagerModel(runner, gameSettings);
         PathFinder pathFinder = new PathFinder(map);
 
-        IEnemyModel blinky = CreateEnemyModel(new BlinkyBehavior(map, pathFinder));
-
-        IEnemyModel pinky = CreateEnemyModel(new PinkyBehavior(map, pathFinder));
-
-        IEnemyModel inky = CreateEnemyModel(
-            new InkyBehavior(map, pathFinder, blinky, collectiblesManager)
+        IEnemyModel blinky = CreateEnemyModel(
+            new BlinkyBehavior(map, pathFinder, random, settings.Blinky)
         );
 
-        IEnemyModel clyde = CreateEnemyModel(new ClydeBehavior(map, pathFinder, collectiblesManager));
+        IEnemyModel pinky = CreateEnemyModel(
+            new PinkyBehavior(map, pathFinder, random, settings.Pinky)
+        );
+
+        IEnemyModel inky = CreateEnemyModel(
+            new InkyBehavior(map, pathFinder, random, collectiblesManager, blinky, settings.Inky)
+        );
+
+        IEnemyModel clyde = CreateEnemyModel(
+            new ClydeBehavior(map, pathFinder, random, collectiblesManager, settings.Clyde)
+        );
 
         return new EnemyManager(enemyModeManager, blinky, pinky, inky, clyde);
 

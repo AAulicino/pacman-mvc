@@ -2,12 +2,17 @@ using UnityEngine;
 
 public class PinkyBehavior : BaseEnemyAIBehavior
 {
-    const int LEADING_TILES = 2;
-
     public override EnemyType EnemyType => EnemyType.Pinky;
+    readonly IPinkySettings settings;
 
-    public PinkyBehavior (Tile[,] map, IPathFinder pathFinder) : base(map, pathFinder)
+    public PinkyBehavior (
+        Tile[,] map,
+        IPathFinder pathFinder,
+        IRandomProvider randomProvider,
+        IPinkySettings settings
+    ) : base(map, pathFinder, randomProvider)
     {
+        this.settings = settings;
     }
 
     public override Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target)
@@ -22,20 +27,16 @@ public class PinkyBehavior : BaseEnemyAIBehavior
     }
 
     Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-    {
-        Vector2Int topLeftArea = new Vector2Int(
-            Random.Range(0, mapWidth / 2),
-            Random.Range(mapHeight / 2, mapHeight)
-        );
-
-        return pathFinder.FindPath(position, topLeftArea);
-    }
+        => pathFinder.FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
-        Vector2Int leadingPosition = target.Position + target.DirectionVector * LEADING_TILES;
+        Vector2Int leadingPosition = target.Position;
+        leadingPosition += target.DirectionVector * settings.LeadingTilesAheadOfPacman;
+
         if (target.Direction == Direction.Up)
-            leadingPosition += Vector2Int.left * LEADING_TILES; // replicating original pacman overflow bug :)
+            leadingPosition += Vector2Int.left * settings.LeadingTilesAheadOfPacman; // replicating original pacman overflow bug :)
+
         return pathFinder.FindPath(position, GetValidPositionCloseTo(leadingPosition));
     }
 

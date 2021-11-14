@@ -13,18 +13,43 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
     protected readonly int mapHeight;
     protected readonly int mapMagnitude;
 
-    protected BaseEnemyAIBehavior (Tile[,] map, IPathFinder pathFinder)
+    protected readonly IRandomProvider random;
+
+    protected BaseEnemyAIBehavior (Tile[,] map, IPathFinder pathFinder, IRandomProvider random)
     {
         this.map = map;
         this.pathFinder = pathFinder;
-
+        this.random = random;
         mapWidth = map.GetLength(0);
         mapHeight = map.GetLength(1);
         mapMagnitude = (int)Mathf.Sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
     }
 
-
     public abstract Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target);
+
+    protected Vector2Int GetRandomScatterPosition (ScatterPosition position)
+    {
+        return GetValidPositionCloseTo(position switch
+        {
+            ScatterPosition.TopLeft => new Vector2Int(
+                random.Range(0, mapWidth / 2),
+                random.Range(mapHeight / 2, mapHeight)
+            ),
+            ScatterPosition.TopRight => new Vector2Int(
+                random.Range(mapWidth / 2, mapWidth),
+                random.Range(mapHeight / 2, mapHeight)
+            ),
+            ScatterPosition.BottomLeft => new Vector2Int(
+                random.Range(0, mapWidth / 2),
+                random.Range(0, mapHeight / 2)
+            ),
+            ScatterPosition.BottomRight => new Vector2Int(
+                random.Range(mapWidth / 2, mapWidth),
+                random.Range(0, mapHeight / 2)
+            ),
+            _ => throw new NotImplementedException(),
+        });
+    }
 
     protected Vector2Int GetValidPositionCloseTo (Vector2Int pos)
         => GetValidPositionCloseTo(pos, TileExtensions.IsEnemyWalkable);
