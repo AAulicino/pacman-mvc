@@ -26,7 +26,17 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
             Resources.Load<TextAsset>("GameSettings").text
         );
 
-        PlayerModel player = new PlayerModel(map, this, actorSettings, new InputWrapper());
+        IEnemiesBehaviorSettings enemiesSettings = JsonUtility.FromJson<EnemiesBehaviorSettings>(
+            Resources.Load<TextAsset>("EnemiesBehaviorSettings").text
+        );
+
+        PlayerModel player = new PlayerModel(
+            map,
+            this,
+            actorSettings,
+            InputProvider.Instance,
+            TimeProvider.Instance
+        );
 
         ICollectiblesManagerModel collectiblesManager = CollectiblesManagerModelFactory.Create(map);
 
@@ -39,7 +49,8 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
                 gameSettings,
                 this,
                 player,
-                collectiblesManager
+                collectiblesManager,
+                enemiesSettings
             ),
             collectiblesManager
         );

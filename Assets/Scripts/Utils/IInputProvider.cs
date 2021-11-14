@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IInput
+public interface IInputProvider
 {
     bool GetKey (KeyCode key);
 }

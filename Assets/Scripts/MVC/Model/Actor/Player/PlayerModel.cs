@@ -18,17 +18,25 @@ public class PlayerModel : IPlayerModel
     readonly Tile[,] map;
     readonly ICoroutineRunner runner;
     readonly IActorSettings settings;
-    readonly IInput input;
+    readonly IInputProvider input;
+    readonly ITimeProvider time;
 
     Coroutine moveCoroutine;
     Direction nextMovement;
 
-    public PlayerModel (Tile[,] map, ICoroutineRunner runner, IActorSettings settings, IInput input)
+    public PlayerModel (
+        Tile[,] map,
+        ICoroutineRunner runner,
+        IActorSettings settings,
+        IInputProvider input,
+        ITimeProvider timeProvider
+    )
     {
         this.map = map;
         this.runner = runner;
         this.settings = settings;
         this.input = input;
+        this.time = timeProvider;
     }
 
     public void Enable ()
@@ -48,7 +56,8 @@ public class PlayerModel : IPlayerModel
         float delta = 0;
         while (true)
         {
-            delta += Time.deltaTime;
+            delta += time.DeltaTime;
+
             if (input.GetKey(KeyCode.UpArrow))
                 nextMovement = Direction.Up;
             else if (input.GetKey(KeyCode.DownArrow))
