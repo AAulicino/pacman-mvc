@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class ClydeSettings : BaseBehaviorSettings, IClydeSettings
 {
     [SerializeField] float collectedRequirementRatio;

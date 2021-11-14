@@ -22,7 +22,6 @@ public class ActorController
         this.view = view;
 
         originPosition = model.Position;
-        view.transform.position = originPosition;
 
         model.OnPositionChanged += HandlePositionChanged;
         model.OnDirectionChanged += HandleDirectionChanged;

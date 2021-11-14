@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class GameSession : MonoBehaviour, ICoroutineRunner
 {
-    [SerializeField] ContentFitterCamera camera;
+    [SerializeField] ContentFitterCamera contentCamera;
+    [SerializeField] MapView mapView;
 
     IMapModel mapModel;
     MapController mapController;
-    MapView mapView;
 
     [RuntimeInitializeOnLoadMethod]
     static void InitializeOnLoad ()
@@ -16,8 +16,6 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
     void Awake ()
     {
-        mapView = Instantiate(Resources.Load<MapView>("MapView"));
-
         Tile[,] map = LoadMap(0);
 
         IActorSettings actorSettings = JsonUtility.FromJson<ActorSettings>(
@@ -60,7 +58,7 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
         mapController = new MapController(
             mapModel,
             mapView,
-            Resources.Load<MapTileSpriteDatabase>("MapTileSpriteDatabase")
+            Resources.Load<MapTileSpriteDatabase>("Databases/MapTileSpriteDatabase")
         );
 
         mapController.Initialize();
@@ -68,7 +66,7 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
         const float TILE_PIVOT_OFFSET = 0.5f; //center
 
-        camera.SetViewContent(
+        contentCamera.SetViewContent(
             new CameraViewContent(
                 new Vector3(-TILE_PIVOT_OFFSET, -TILE_PIVOT_OFFSET, 0),
                 new Vector3(
@@ -82,7 +80,7 @@ public class GameSession : MonoBehaviour, ICoroutineRunner
 
     Tile[,] LoadMap (int mapId)
     {
-        string mapString = Resources.Load<TextAsset>("Map" + mapId).text;
+        string mapString = Resources.Load<TextAsset>("Maps/Map" + mapId).text;
         return MapParser.Parse(mapString);
     }
 }

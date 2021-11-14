@@ -34,16 +34,16 @@ TextureImporter:
     second: SpriteSheet_9
   - first:
       213: -5540648042656198855
-    second: Blinky00
+    second: Blinky001
   - first:
       213: 3929453942698372637
-    second: Pinky00
+    second: Pinky001
   - first:
       213: 8058879627694289943
-    second: Inky00
+    second: Inky001
   - first:
       213: 6833624519701456044
-    second: Clyde00
+    second: Clyde001
   - first:
       213: 4050273695720440628
     second: PacMan0
@@ -223,16 +223,16 @@ TextureImporter:
     second: SpriteSheet_72
   - first:
       213: -4378996295949237452
-    second: SpriteSheet_73
+    second: Blinky00
   - first:
       213: 5457183550987407018
-    second: SpriteSheet_74
+    second: Pinky00
   - first:
       213: 6335360754331110017
-    second: SpriteSheet_75
+    second: Inky00
   - first:
       213: 7222537069723327875
-    second: SpriteSheet_76
+    second: Clyde00
   - first:
       213: 2669869789316320289
     second: SpriteSheet_77
@@ -976,7 +976,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blinky00
+      name: Blinky001
       rect:
         serializedVersion: 2
         x: 651
@@ -997,7 +997,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinky00
+      name: Pinky001
       rect:
         serializedVersion: 2
         x: 701
@@ -1018,7 +1018,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Inky00
+      name: Inky001
       rect:
         serializedVersion: 2
         x: 751
@@ -1039,7 +1039,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Clyde00
+      name: Clyde001
       rect:
         serializedVersion: 2
         x: 801
@@ -2299,7 +2299,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_73
+      name: Blinky00
       rect:
         serializedVersion: 2
         x: 651
@@ -2320,7 +2320,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_74
+      name: Pinky00
       rect:
         serializedVersion: 2
         x: 701
@@ -2341,7 +2341,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_75
+      name: Inky00
       rect:
         serializedVersion: 2
         x: 751
@@ -2362,7 +2362,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_76
+      name: Clyde00
       rect:
         serializedVersion: 2
         x: 801

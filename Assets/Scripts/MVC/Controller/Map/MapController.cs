@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MapController
 {
-    readonly IMapModel model;
     readonly MapView view;
+    readonly IMapModel model;
     readonly MapTileSpriteDatabase spriteDatabase;
 
     CollectiblesManagerController collectibleController;
