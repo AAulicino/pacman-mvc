@@ -52,7 +52,7 @@ public class InkyBehavior : BaseEnemyAIBehavior
 
         return mode switch
         {
-            EnemyAIMode.Scatter => GetDefaultDeadAction(position, target),
+            EnemyAIMode.Scatter => GetDefaultScatterAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
             EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
             EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
