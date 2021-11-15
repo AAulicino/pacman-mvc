@@ -81,21 +81,15 @@ public class GameModel : IGameModel
     void KillPlayer ()
     {
         Player.Die();
-        DisableEnemies();
+        enemyManager.Disable();
         OnGameEnded?.Invoke(false);
     }
 
     void HandleAllCollectiblesCollected ()
     {
         Player.Disable();
-        DisableEnemies();
+        enemyManager.Disable();
         OnGameEnded?.Invoke(true);
-    }
-
-    void DisableEnemies ()
-    {
-        foreach (IEnemyModel enemy in Enemies)
-            enemy.Disable();
     }
 
     public void Dispose ()

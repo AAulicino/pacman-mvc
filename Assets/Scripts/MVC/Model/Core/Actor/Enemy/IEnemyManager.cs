@@ -6,6 +6,7 @@ public interface IEnemyManager : IDisposable
 
     event Action<IEnemyModel> OnEnemyPositionChanged;
 
+    void Disable ();
     void Initialize ();
     void TriggerFrightenedMode ();
 }

@@ -73,7 +73,6 @@ public class EnemyAI : IEnemyAI
     void SyncActiveModeWithManager ()
     {
         ActiveMode = modeManager.ActiveMode;
-        Debug.Log("ActiveMode changed " + ActiveMode);
         OnActiveModeChanged?.Invoke();
     }
 
@@ -86,7 +85,6 @@ public class EnemyAI : IEnemyAI
     public void Die ()
     {
         ActiveMode = EnemyAIMode.Dead;
-        Debug.Log("ActiveMode changed " + ActiveMode);
         path = behavior.GetAction(Position, ActiveMode, target);
         node = 0;
         OnActiveModeChanged?.Invoke();

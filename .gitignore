@@ -44,19 +44,11 @@ sysinfo.txt
 # MacOS
 .DS_STORE
 
-# Bigo
-/Assets/Rodrigo
-/Assets/Rodrigo.meta
-
-# Pixo
 .Gradle/
 /AssetBundles
 /Assets/UserSettings/
 /Assets/UserSettings.meta
 remote_config_data
-
-# Console Pro
-*.cpf
 
 # CsvCharacterExtractor
 **/CsvCharacterExtractor/in/*

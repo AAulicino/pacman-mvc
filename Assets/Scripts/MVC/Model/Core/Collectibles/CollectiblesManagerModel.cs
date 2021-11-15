@@ -7,7 +7,7 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
     public event Action OnAllCollectiblesCollected;
     public event Action<ICollectibleModel> OnCollect;
 
-    public int TotalCollectibles { get; }
+    public int TotalCollectibles { get; private set; }
     public int CollectedCount { get; private set; }
 
     public ICollection<ICollectibleModel> Collectibles => collectibles.Values;
@@ -15,7 +15,16 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
     readonly Dictionary<Vector2Int, ICollectibleModel> collectibles =
         new Dictionary<Vector2Int, ICollectibleModel>();
 
+    readonly ICollectibleModelFactory collectibleFactory;
+    readonly IMapModel map;
+
     public CollectiblesManagerModel (IMapModel map, ICollectibleModelFactory collectibleFactory)
+    {
+        this.map = map;
+        this.collectibleFactory = collectibleFactory;
+    }
+
+    public void Initialize ()
     {
         for (int x = 0; x < map.Width; x++)
         {

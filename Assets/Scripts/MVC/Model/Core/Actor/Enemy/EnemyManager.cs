@@ -31,6 +31,12 @@ public class EnemyManager : IEnemyManager
         enemyModeManager.TriggerFrightenedMode();
     }
 
+    public void Disable ()
+    {
+        foreach (IEnemyModel enemy in Enemies)
+            enemy.Disable();
+    }
+
     public void Dispose ()
     {
         foreach (IEnemyModel enemy in enemies)

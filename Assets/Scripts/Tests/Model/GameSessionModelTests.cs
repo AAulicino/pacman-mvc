@@ -1,93 +1,112 @@
 using System;
 using NSubstitute;
 using NUnit.Framework;
-using UnityEngine;
 
-public class GameSessionModelTests : MonoBehaviour
+namespace Tests
 {
-    GameSessionModel model;
-    IGameModelFactory gameModelFactory;
-    IMapFactory mapFactory;
-
-    [SetUp]
-    public void Setup ()
+    public class GameSessionModelTests
     {
-        gameModelFactory = Substitute.For<IGameModelFactory>();
-        mapFactory = Substitute.For<IMapFactory>();
+        GameSessionModel model;
+        IGameModelFactory gameModelFactory;
+        IMapFactory mapFactory;
 
-        model = new GameSessionModel(gameModelFactory, mapFactory);
-    }
+        [SetUp]
+        public void Setup ()
+        {
+            gameModelFactory = Substitute.For<IGameModelFactory>();
+            mapFactory = Substitute.For<IMapFactory>();
 
-    [Test]
-    public void StartNewGame_Raises_OnGame_Start ()
-    {
-        gameModelFactory.Create(default).ReturnsForAnyArgs(Substitute.For<IGameModel>());
+            model = new GameSessionModel(gameModelFactory, mapFactory);
+        }
 
-        bool called = false;
-        model.OnGameStart += () => called = true;
+        class StartNewGame : GameSessionModelTests
+        {
+            [Test]
+            public void Raises_OnGame_Start ()
+            {
+                gameModelFactory.Create(default).ReturnsForAnyArgs(Substitute.For<IGameModel>());
 
-        model.StartNewGame();
+                bool called = false;
+                model.OnGameStart += () => called = true;
 
-        Assert.IsTrue(called);
-    }
+                model.StartNewGame();
 
-    [Test]
-    public void Raises_OnGameEnded_True ()
-    {
-        IGameModel gameModel = Substitute.For<IGameModel>();
-        gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
+                Assert.IsTrue(called);
+            }
 
-        bool? victory = null;
-        model.OnGameEnded += x => victory = x;
+            [Test]
+            public void Raises_OnGameEnded_True ()
+            {
+                IGameModel gameModel = Substitute.For<IGameModel>();
+                gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
 
-        model.StartNewGame();
+                bool? victory = null;
+                model.OnGameEnded += x => victory = x;
 
-        gameModel.OnGameEnded += Raise.Event<Action<bool>>(true);
+                model.StartNewGame();
 
-        Assert.IsTrue(victory);
-    }
+                gameModel.OnGameEnded += Raise.Event<Action<bool>>(true);
 
-    [Test]
-    public void Raises_OnGameEnded_False ()
-    {
-        IGameModel gameModel = Substitute.For<IGameModel>();
-        gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
+                Assert.IsTrue(victory);
+            }
 
-        bool? victory = null;
-        model.OnGameEnded += x => victory = x;
+            [Test]
+            public void Raises_OnGameEnded_False ()
+            {
+                IGameModel gameModel = Substitute.For<IGameModel>();
+                gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
 
-        model.StartNewGame();
+                bool? victory = null;
+                model.OnGameEnded += x => victory = x;
 
-        gameModel.OnGameEnded += Raise.Event<Action<bool>>(true);
+                model.StartNewGame();
 
-        Assert.IsTrue(victory);
-    }
+                gameModel.OnGameEnded += Raise.Event<Action<bool>>(true);
 
-    [Test]
-    public void StartNewGame_Calls_GameModel_Initialize ()
-    {
-        IGameModel gameModel = Substitute.For<IGameModel>();
-        gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
+                Assert.IsTrue(victory);
+            }
 
-        bool? victory = null;
-        model.OnGameEnded += x => victory = x;
+            [Test]
+            public void Calls_GameModel_Initialize ()
+            {
+                IGameModel gameModel = Substitute.For<IGameModel>();
+                gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
 
-        model.StartNewGame();
+                bool? victory = null;
+                model.OnGameEnded += x => victory = x;
 
-        gameModel.Received().Initialize();
-    }
+                model.StartNewGame();
 
-    [Test]
-    public void Sets_GameModel ()
-    {
-        IGameModel gameModel = Substitute.For<IGameModel>();
-        gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
+                gameModel.Received().Initialize();
+            }
 
-        bool? victory = null;
-        model.OnGameEnded += x => victory = x;
+            [Test]
+            public void Sets_GameModel ()
+            {
+                IGameModel gameModel = Substitute.For<IGameModel>();
+                gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
 
-        model.StartNewGame();
+                bool? victory = null;
+                model.OnGameEnded += x => victory = x;
 
-        Assert.AreEqual(gameModel, model.GameModel);
+                model.StartNewGame();
+
+                Assert.AreEqual(gameModel, model.GameModel);
+            }
+
+            [Test]
+            public void Disposes_Previous_GameModel ()
+            {
+                IGameModel gameModel = Substitute.For<IGameModel>();
+                gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
+
+                bool? victory = null;
+                model.OnGameEnded += x => victory = x;
+
+                model.StartNewGame();
+
+                gameModel.Received().Dispose();
+            }
+        }
     }
 }
