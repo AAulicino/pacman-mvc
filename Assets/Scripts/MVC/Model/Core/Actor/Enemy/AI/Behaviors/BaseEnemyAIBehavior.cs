@@ -117,28 +117,39 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
         int x = position.x;
         int y = position.y;
 
-        if (map.InBounds(x + 1, y))
-            yield return new Vector2Int(x + 1, y);
+        if (InBounds(x + 1, y, out Vector2Int pos))
+            yield return pos;
 
-        if (map.InBounds(x + 1, y + 1))
-            yield return new Vector2Int(x + 1, y + 1);
+        if (InBounds(x + 1, y + 1, out pos))
+            yield return pos;
 
-        if (map.InBounds(x + 1, y - 1))
-            yield return new Vector2Int(x + 1, y - 1);
+        if (InBounds(x + 1, y - 1, out pos))
+            yield return pos;
 
-        if (map.InBounds(x - 1, y))
-            yield return new Vector2Int(x - 1, y);
+        if (InBounds(x - 1, y, out pos))
+            yield return pos;
 
-        if (map.InBounds(x - 1, y - 1))
-            yield return new Vector2Int(x - 1, y - 1);
+        if (InBounds(x - 1, y - 1, out pos))
+            yield return pos;
 
-        if (map.InBounds(x - 1, y + 1))
-            yield return new Vector2Int(x - 1, y + 1);
+        if (InBounds(x - 1, y + 1, out pos))
+            yield return pos;
 
-        if (map.InBounds(x, y + 1))
-            yield return new Vector2Int(x, y + 1);
+        if (InBounds(x, y + 1, out pos))
+            yield return pos;
 
-        if (map.InBounds(x, y - 1))
-            yield return new Vector2Int(x, y - 1);
+        if (InBounds(x, y - 1, out pos))
+            yield return pos;
+    }
+
+    bool InBounds (int x, int y, out Vector2Int pos)
+    {
+        if (map.InBounds(x, y))
+        {
+            pos = new Vector2Int(x, y);
+            return true;
+        }
+        pos = default;
+        return false;
     }
 }

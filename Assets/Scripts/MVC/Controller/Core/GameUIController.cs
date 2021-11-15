@@ -7,6 +7,7 @@ public class GameUIController : IDisposable
     readonly GameUIView uiView;
 
     CollectiblesManagerUIController collectiblesManagerUIController;
+    GameInputUIController inputUIController;
 
     public GameUIController (IGameModel model, GameUIView uiView)
     {
@@ -20,10 +21,16 @@ public class GameUIController : IDisposable
             model.CollectiblesManager,
             uiView.CollectiblesManagerUIView
         );
+
+        inputUIController = new GameInputUIController(
+            model.Input,
+            uiView.InputUIViews
+        );
     }
 
     public void Dispose ()
     {
+        inputUIController.Dispose();
         collectiblesManagerUIController.Dispose();
         Object.Destroy(uiView.gameObject);
     }

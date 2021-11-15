@@ -12,7 +12,7 @@ namespace Tests.Core.Actor.Player
         ICoroutineRunner runner;
         IActorSettings settings;
         IGameSettings gameSettings;
-        IInputProvider input;
+        IGameInputModel input;
         ITimeProvider timeProvider;
 
         PlayerModel model;
@@ -24,7 +24,7 @@ namespace Tests.Core.Actor.Player
             runner = Substitute.For<ICoroutineRunner>();
             settings = Substitute.For<IActorSettings>();
             gameSettings = Substitute.For<IGameSettings>();
-            input = Substitute.For<IInputProvider>();
+            input = Substitute.For<IGameInputModel>();
             timeProvider = Substitute.For<ITimeProvider>();
 
             map[default].ReturnsForAnyArgs(Tile.Path);
@@ -133,6 +133,48 @@ namespace Tests.Core.Actor.Player
         class Move : PlayerModelTests
         {
             [Test]
+            public void Waits_For_Move_Time_Wait ()
+            {
+                timeProvider.DeltaTime.Returns(1);
+                settings.MovementTime.Returns(2);
+
+                bool? raised = null;
+                model.OnPositionChanged += () => raised = true;
+
+                runner.WhenForAnyArgs(x => x.StartCoroutine(default))
+                    .Do(x =>
+                    {
+                        IEnumerator arg = x.Arg<IEnumerator>();
+                        arg.MoveNext();
+                    }
+                );
+
+                model.Enable();
+                Assert.IsNull(raised);
+            }
+
+            [Test]
+            public void Waits_For_Move_Time_Move ()
+            {
+                timeProvider.DeltaTime.Returns(1);
+                settings.MovementTime.Returns(1);
+
+                bool? raised = null;
+                model.OnPositionChanged += () => raised = true;
+
+                runner.WhenForAnyArgs(x => x.StartCoroutine(default))
+                    .Do(x =>
+                    {
+                        IEnumerator arg = x.Arg<IEnumerator>();
+                        arg.MoveNext();
+                    }
+                );
+
+                model.Enable();
+                Assert.IsTrue(raised);
+            }
+
+            [Test]
             public void Changes_Direction_Input_Up ()
             {
                 runner.WhenForAnyArgs(x => x.StartCoroutine(default))
@@ -143,7 +185,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.UpArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Up);
 
                 model.Enable();
 
@@ -162,7 +204,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.DownArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Down);
 
                 model.Enable();
 
@@ -181,7 +223,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.LeftArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Left);
 
                 model.Enable();
 
@@ -200,7 +242,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.RightArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Right);
 
                 model.Enable();
 
@@ -222,7 +264,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.DownArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Down);
 
                 model.Enable();
 
@@ -245,7 +287,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.DownArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Down);
 
                 model.Enable();
 
@@ -277,10 +319,10 @@ namespace Tests.Core.Actor.Player
                     .Do(x =>
                     {
                         IEnumerator arg = x.Arg<IEnumerator>();
-                        input.GetKey(KeyCode.UpArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
                         arg.MoveNext();
-                        input.GetKey(KeyCode.UpArrow).Returns(false);
-                        input.GetKey(KeyCode.RightArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
+                        input.GetDirection().Returns(Direction.Right);
                         arg.MoveNext();
                     }
                 );
@@ -301,10 +343,10 @@ namespace Tests.Core.Actor.Player
                     .Do(x =>
                     {
                         IEnumerator arg = x.Arg<IEnumerator>();
-                        input.GetKey(KeyCode.UpArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
                         arg.MoveNext();
-                        input.GetKey(KeyCode.UpArrow).Returns(false);
-                        input.GetKey(KeyCode.RightArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
+                        input.GetDirection().Returns(Direction.Right);
                         arg.MoveNext();
                     }
                 );
@@ -326,11 +368,11 @@ namespace Tests.Core.Actor.Player
                     .Do(x =>
                     {
                         IEnumerator arg = x.Arg<IEnumerator>();
-                        input.GetKey(KeyCode.UpArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
                         arg.MoveNext();
                         model.OnPositionChanged += () => raised = true;
-                        input.GetKey(KeyCode.UpArrow).Returns(false);
-                        input.GetKey(KeyCode.RightArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
+                        input.GetDirection().Returns(Direction.Right);
                         arg.MoveNext();
                     }
                 );
@@ -350,10 +392,10 @@ namespace Tests.Core.Actor.Player
                     .Do(x =>
                     {
                         IEnumerator arg = x.Arg<IEnumerator>();
-                        input.GetKey(KeyCode.UpArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
                         arg.MoveNext();
-                        input.GetKey(KeyCode.UpArrow).Returns(false);
-                        input.GetKey(KeyCode.RightArrow).Returns(true);
+                        input.GetDirection().Returns(Direction.Up);
+                        input.GetDirection().Returns(Direction.Right);
                         arg.MoveNext();
                     }
                 );
@@ -376,7 +418,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.UpArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Up);
                 map.TeleportPositions.Returns(new[] { Vector2Int.up, Vector2Int.up * -1 });
 
                 map[Vector2Int.up].Returns(Tile.Teleport);
@@ -397,7 +439,7 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.UpArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Up);
                 map.TeleportPositions.Returns(new[] { Vector2Int.up });
 
                 map[Vector2Int.up].Returns(Tile.Teleport);
@@ -421,7 +463,36 @@ namespace Tests.Core.Actor.Player
                     }
                 );
 
-                input.GetKey(KeyCode.UpArrow).Returns(true);
+                input.GetDirection().Returns(Direction.Up);
+                map.TeleportPositions.Returns(new[] { Vector2Int.up, Vector2Int.up * -1 });
+
+                map[Vector2Int.up].Returns(Tile.Teleport);
+
+                model.Enable();
+
+                Assert.IsTrue(raised);
+            }
+
+            [Test]
+            public void Teleport_Skips_MovementTime ()
+            {
+                timeProvider.DeltaTime.Returns(1);
+                settings.MovementTime.Returns(1);
+
+                bool? raised = null;
+
+                runner.WhenForAnyArgs(x => x.StartCoroutine(default))
+                    .Do(x =>
+                    {
+                        IEnumerator arg = x.Arg<IEnumerator>();
+                        arg.MoveNext();
+                        timeProvider.DeltaTime.Returns(0);
+                        model.OnPositionChanged += () => raised = true;
+                        arg.MoveNext();
+                    }
+                );
+
+                input.GetDirection().Returns(Direction.Up);
                 map.TeleportPositions.Returns(new[] { Vector2Int.up, Vector2Int.up * -1 });
 
                 map[Vector2Int.up].Returns(Tile.Teleport);

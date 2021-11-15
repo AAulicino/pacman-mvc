@@ -8,6 +8,7 @@ public interface IGameModel : IDisposable
     IPlayerModel Player { get; }
     IEnemyModel[] Enemies { get; }
     ICollectiblesManagerModel CollectiblesManager { get; }
+    IGameInputModel Input { get; }
 
     void Initialize ();
 }

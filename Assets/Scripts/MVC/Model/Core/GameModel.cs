@@ -9,18 +9,21 @@ public class GameModel : IGameModel
 
     public IMapModel Map { get; }
     public ICollectiblesManagerModel CollectiblesManager { get; }
+    public IGameInputModel Input { get; }
 
     public IPlayerModel Player { get; }
     public IEnemyModel[] Enemies => enemyManager.Enemies;
 
     public GameModel (
         IMapModel map,
+        IGameInputModel input,
         IPlayerModel player,
         IEnemyManager enemyManager,
         ICollectiblesManagerModel collectiblesManager
     )
     {
         this.Map = map;
+        this.Input = input;
         this.Player = player;
         this.enemyManager = enemyManager;
         CollectiblesManager = collectiblesManager;

@@ -22,20 +22,27 @@ public class GameModelFactory : IGameModelFactory
     {
         IMapModel map = new MapModel(tiles);
 
+        GameInputModel input = new GameInputModel(InputProvider.Instance);
+
         PlayerModel player = new PlayerModel(
             map,
             coroutineRunner,
             actorSettings,
             gameSettings,
-            InputProvider.Instance,
+            input,
             TimeProvider.Instance
         );
 
-        ICollectiblesManagerModel collectiblesManager = CollectiblesManagerModelFactory.Create(map);
+        ICollectiblesManagerModel collectiblesManager = new CollectiblesManagerModel(
+            map,
+            new CollectibleModelFactory()
+        );
+
         collectiblesManager.Initialize();
 
         return new GameModel(
             map,
+            input,
             player,
             EnemyManagerFactory.Create(
                 new PathFinder(tiles),

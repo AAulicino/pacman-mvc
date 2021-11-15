@@ -10,6 +10,7 @@ namespace Tests.Core
         GameModel model;
 
         IMapModel map;
+        IGameInputModel input;
         IPlayerModel player;
         IEnemyManager enemyManager;
         ICollectiblesManagerModel collectiblesManager;
@@ -18,11 +19,12 @@ namespace Tests.Core
         public void Setup ()
         {
             map = Substitute.For<IMapModel>();
+            input = Substitute.For<IGameInputModel>();
             player = Substitute.For<IPlayerModel>();
             enemyManager = Substitute.For<IEnemyManager>();
             collectiblesManager = Substitute.For<ICollectiblesManagerModel>();
 
-            model = new GameModel(map, player, enemyManager, collectiblesManager);
+            model = new GameModel(map, input, player, enemyManager, collectiblesManager);
         }
 
         class Map : GameModelTests
@@ -31,6 +33,15 @@ namespace Tests.Core
             public void Map_Equals ()
             {
                 Assert.AreEqual(map, model.Map);
+            }
+        }
+
+        class Input : GameModelTests
+        {
+            [Test]
+            public void Input_Equals ()
+            {
+                Assert.AreEqual(input, model.Input);
             }
         }
 

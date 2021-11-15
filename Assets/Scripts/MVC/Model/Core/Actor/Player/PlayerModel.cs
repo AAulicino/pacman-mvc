@@ -19,13 +19,13 @@ public class PlayerModel : IPlayerModel
     readonly IMapModel map;
     readonly ICoroutineRunner runner;
     readonly IActorSettings settings;
-    readonly IInputProvider input;
+    readonly IGameInputModel input;
     readonly ITimeProvider time;
     readonly WaitForSeconds powerUpWaiter;
 
     Coroutine powerUpCoroutine;
     Coroutine moveCoroutine;
-    Direction nextMovement = Direction.Left;
+    Direction nextMovement;
     bool skipWait;
 
     public PlayerModel (
@@ -33,7 +33,7 @@ public class PlayerModel : IPlayerModel
         ICoroutineRunner runner,
         IActorSettings settings,
         IGameSettings gameSettings,
-        IInputProvider input,
+        IGameInputModel input,
         ITimeProvider timeProvider
     )
     {
@@ -69,14 +69,7 @@ public class PlayerModel : IPlayerModel
         {
             delta += time.DeltaTime;
 
-            if (input.GetKey(KeyCode.UpArrow))
-                nextMovement = Direction.Up;
-            else if (input.GetKey(KeyCode.DownArrow))
-                nextMovement = Direction.Down;
-            else if (input.GetKey(KeyCode.LeftArrow))
-                nextMovement = Direction.Left;
-            else if (input.GetKey(KeyCode.RightArrow))
-                nextMovement = Direction.Right;
+            nextMovement = input.GetDirection();
 
             if (skipWait || delta >= settings.MovementTime)
             {

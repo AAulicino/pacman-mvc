@@ -25,7 +25,6 @@ public class GameSessionUIController
     {
         uiView.Canvas.worldCamera = view.ContentCamera.Camera;
         uiView.SetGameEndMessageActive(false);
-        uiView.gameObject.SetActive(true);
     }
 
     void HandleGameStart ()
@@ -35,7 +34,7 @@ public class GameSessionUIController
             GameSessionViewFactory.CreateUI(uiView.transform)
         );
         gameUIController.Initialize();
-        uiView.gameObject.SetActive(false);
+        uiView.SetStartGameUIActive(false);
     }
 
     void HandleGameEnded (bool victory)
@@ -46,7 +45,6 @@ public class GameSessionUIController
         uiView.SetGameEndMessageActive(true);
         uiView.SetStartGameButtonText("Play Again");
         uiView.SetStartGameUIActive(true);
-        uiView.gameObject.SetActive(true);
     }
 
     void HandleUIViewClick ()

@@ -613,7 +613,7 @@ TextureImporter:
     second: SpriteSheet_202
   - first:
       213: 5199191754792244096
-    second: SpriteSheet_203
+    second: arrow_up
   - first:
       213: 2079617485199575286
     second: SpriteSheet_204
@@ -622,7 +622,7 @@ TextureImporter:
     second: SpriteSheet_205
   - first:
       213: -982652687152984134
-    second: SpriteSheet_206
+    second: arrow_right
   - first:
       213: -2156383727643743694
     second: SpriteSheet_207
@@ -631,7 +631,7 @@ TextureImporter:
     second: SpriteSheet_208
   - first:
       213: 3956945362307432822
-    second: SpriteSheet_209
+    second: arrow_down
   - first:
       213: -4386433423324854753
     second: SpriteSheet_210
@@ -3856,10 +3856,10 @@ TextureImporter:
       name: SpriteSheet_148
       rect:
         serializedVersion: 2
-        x: 363
-        y: 417
-        width: 8
-        height: 50
+        x: 368
+        y: 451
+        width: 3
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5008,7 +5008,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_203
+      name: arrow_up
       rect:
         serializedVersion: 2
         x: 210
@@ -5071,7 +5071,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_206
+      name: arrow_right
       rect:
         serializedVersion: 2
         x: 214
@@ -5134,7 +5134,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_209
+      name: arrow_down
       rect:
         serializedVersion: 2
         x: 210
