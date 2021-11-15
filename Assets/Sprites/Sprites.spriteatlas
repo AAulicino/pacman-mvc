@@ -110,7 +110,6 @@ SpriteAtlas:
   - {fileID: 299985813260920670, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -1174045761442754080, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -8541409857757731410, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: -9016946094802586908, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -1680910415198251487, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 8361751297272463746, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -1504178909458899807, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -133,7 +132,6 @@ SpriteAtlas:
   - {fileID: -3336083728469882985, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 8679224743372824947, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -7446906405079736297, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 2177870221934184097, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 8289768022458011462, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 3664476683137694898, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -101211121952396709, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -171,6 +169,7 @@ SpriteAtlas:
   - {fileID: 4403123471519957660, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 8762979994364277361, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -740330472280341754, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 2177870221934184097, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 6783973438557096381, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7501586277352024372, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -7866031555861458757, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -188,11 +187,9 @@ SpriteAtlas:
   - {fileID: -7031781851376510243, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7093715425317752191, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7619495285826691685, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 2846755446133648665, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 4841545508341194271, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -2354785544754498944, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 6479714128885920242, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
-  - {fileID: 3857234065337388221, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -572114191769764109, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 4797463210970005564, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7929823768701145548, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -246,6 +243,8 @@ SpriteAtlas:
   - {fileID: -2764029711273647405, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -4881886091595114325, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 7222537069723327875, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 2846755446133648665, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
+  - {fileID: 3857234065337388221, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 6335360754331110017, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: 626035762396133777, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
   - {fileID: -5540648042656198855, guid: 8c428d1cf2ff24a7182559ee81a770e1, type: 3}
@@ -330,7 +329,6 @@ SpriteAtlas:
   - SpriteSheet_21
   - SpriteSheet_99
   - SpriteSheet_18
-  - SpriteSheet_98
   - SpriteSheet_80
   - SpriteSheet_31
   - SpriteSheet_79
@@ -353,7 +351,6 @@ SpriteAtlas:
   - SpriteSheet_90
   - SpriteSheet_37
   - SpriteSheet_87
-  - SpriteSheet_97
   - SpriteSheet_36
   - SpriteSheet_96
   - SpriteSheet_95
@@ -391,6 +388,7 @@ SpriteAtlas:
   - SpriteSheet_64
   - SpriteSheet_178
   - SpriteSheet_65
+  - Dead
   - SpriteSheet_101
   - SpriteSheet_179
   - SpriteSheet_100
@@ -408,11 +406,9 @@ SpriteAtlas:
   - SpriteSheet_199
   - SpriteSheet_104
   - SpriteSheet_176
-  - SpriteSheet_168
   - SpriteSheet_196
   - SpriteSheet_107
   - SpriteSheet_177
-  - SpriteSheet_167
   - SpriteSheet_197
   - SpriteSheet_48
   - SpriteSheet_106
@@ -466,6 +462,8 @@ SpriteAtlas:
   - SpriteSheet_9
   - SpriteSHeet_0
   - Clyde00
+  - Frightened01
+  - Frightened00
   - Inky00
   - SpriteSheet_202
   - Blinky001

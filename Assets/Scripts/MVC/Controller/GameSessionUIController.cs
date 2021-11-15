@@ -34,6 +34,7 @@ public class GameSessionUIController
             model.GameModel,
             GameSessionViewFactory.CreateUI(uiView.transform)
         );
+        gameUIController.Initialize();
         uiView.gameObject.SetActive(false);
     }
 

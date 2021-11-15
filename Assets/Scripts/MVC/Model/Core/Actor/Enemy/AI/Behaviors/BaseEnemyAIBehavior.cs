@@ -29,7 +29,7 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
     protected Vector2Int[] GetDefaultFrightenedAction (Vector2Int position, IActorModel target)
     {
         Vector2Int fleeDirection = (position - target.Position) * map.Magnitude;
-        return FindPath(position, fleeDirection);
+        return FindPath(position, GetValidPositionCloseTo(fleeDirection));
     }
 
     protected Vector2Int GetRandomScatterPosition (ScatterPosition position)

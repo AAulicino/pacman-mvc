@@ -7,9 +7,9 @@ public class GameSettings : IGameSettings
 {
     [SerializeField] float chaseDuration;
     [SerializeField] float scatterDuration;
-    [SerializeField] float frightenedDuration;
+    [SerializeField] float powerUpDuration;
 
     public float ChaseDuration => chaseDuration;
     public float ScatterDuration => scatterDuration;
-    public float FrightenedDuration => frightenedDuration;
+    public float PowerUpDuration => powerUpDuration;
 }

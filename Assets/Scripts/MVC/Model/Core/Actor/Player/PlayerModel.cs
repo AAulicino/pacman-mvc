@@ -21,7 +21,9 @@ public class PlayerModel : IPlayerModel
     readonly IActorSettings settings;
     readonly IInputProvider input;
     readonly ITimeProvider time;
+    readonly WaitForSeconds powerUpWaiter;
 
+    Coroutine powerUpCoroutine;
     Coroutine moveCoroutine;
     Direction nextMovement = Direction.Left;
     bool skipWait;
@@ -30,6 +32,7 @@ public class PlayerModel : IPlayerModel
         IMapModel map,
         ICoroutineRunner runner,
         IActorSettings settings,
+        IGameSettings gameSettings,
         IInputProvider input,
         ITimeProvider timeProvider
     )
@@ -40,6 +43,7 @@ public class PlayerModel : IPlayerModel
         this.input = input;
         this.time = timeProvider;
 
+        powerUpWaiter = new WaitForSeconds(gameSettings.PowerUpDuration);
         Position = map.PlayerSpawnPoint;
     }
 
@@ -53,6 +57,8 @@ public class PlayerModel : IPlayerModel
     {
         if (moveCoroutine != null)
             runner.StopCoroutine(moveCoroutine);
+        if (powerUpCoroutine != null)
+            runner.StopCoroutine(powerUpCoroutine);
     }
 
     IEnumerator MoveRoutine ()
@@ -132,6 +138,14 @@ public class PlayerModel : IPlayerModel
     public void PowerUp ()
     {
         HasPowerUp = true;
+        powerUpCoroutine = runner.StartCoroutine(PowerUpRoutine());
+    }
+
+    IEnumerator PowerUpRoutine ()
+    {
+        yield return powerUpWaiter;
+        HasPowerUp = false;
+        powerUpCoroutine = null;
     }
 
     void HandleDirection (Vector2Int movementDirectionVector)

@@ -1,6 +1,6 @@
 using System;
 
-public interface IEnemyAIModeManagerModel
+public interface IEnemyAIModeManagerModel : IDisposable
 {
     event Action OnActiveModeChanged;
 

@@ -30,4 +30,11 @@ public class EnemyManager : IEnemyManager
     {
         enemyModeManager.TriggerFrightenedMode();
     }
+
+    public void Dispose ()
+    {
+        foreach (IEnemyModel enemy in enemies)
+            enemy.Dispose();
+        enemyModeManager.Dispose();
+    }
 }

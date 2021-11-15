@@ -295,7 +295,7 @@ TextureImporter:
     second: SpriteSheet_96
   - first:
       213: 2177870221934184097
-    second: SpriteSheet_97
+    second: Dead
   - first:
       213: -9016946094802586908
     second: SpriteSheet_98
@@ -505,10 +505,10 @@ TextureImporter:
     second: SpriteSheet_166
   - first:
       213: 3857234065337388221
-    second: SpriteSheet_167
+    second: Frightened00
   - first:
       213: 2846755446133648665
-    second: SpriteSheet_168
+    second: Frightened01
   - first:
       213: 4641492112899218028
     second: SpriteSheet_169
@@ -2803,12 +2803,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_97
+      name: Dead
       rect:
         serializedVersion: 2
         x: 309
         y: 665
-        width: 10
+        width: 25
         height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -2819,27 +2819,6 @@ TextureImporter:
       bones: []
       spriteID: 1a6c9419d69593e10800000000000000
       internalID: 2177870221934184097
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpriteSheet_98
-      rect:
-        serializedVersion: 2
-        x: 324
-        y: 665
-        width: 10
-        height: 13
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4e23274fc4f5dd280800000000000000
-      internalID: -9016946094802586908
       vertices: []
       indices: 
       edges: []
@@ -4273,7 +4252,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_167
+      name: Frightened00
       rect:
         serializedVersion: 2
         x: 1
@@ -4294,7 +4273,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpriteSheet_168
+      name: Frightened01
       rect:
         serializedVersion: 2
         x: 51

@@ -22,7 +22,7 @@ public class EnemyAIModeManagerModel : IEnemyAIModeManagerModel
 
         chaseDuration = new WaitForSeconds(settings.ChaseDuration);
         scatterDuration = new WaitForSeconds(settings.ScatterDuration);
-        frightenedDuration = new WaitForSeconds(settings.FrightenedDuration);
+        frightenedDuration = new WaitForSeconds(settings.PowerUpDuration);
     }
 
     public void Initialize ()
@@ -56,5 +56,10 @@ public class EnemyAIModeManagerModel : IEnemyAIModeManagerModel
         OnActiveModeChanged?.Invoke();
         yield return frightenedDuration;
         yield return ModeRoutine();
+    }
+
+    public void Dispose ()
+    {
+        runner.StopCoroutine(modeRoutine);
     }
 }

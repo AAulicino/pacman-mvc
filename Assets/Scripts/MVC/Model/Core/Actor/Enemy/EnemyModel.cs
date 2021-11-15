@@ -7,6 +7,7 @@ public class EnemyModel : IEnemyModel
     public event Action OnPositionChanged;
     public event Action OnDirectionChanged;
     public event Action<bool> OnEnableChange;
+    public event Action OnActiveModeChanged;
 
     public Vector2Int Position => ai.Position;
     public Vector2Int DirectionVector { get; private set; }
@@ -14,14 +15,14 @@ public class EnemyModel : IEnemyModel
     public Direction Direction { get; private set; }
 
     public EnemyType EnemyType => ai.EnemyType;
-    public float MovementTime => settings.MovementTime;
+    public EnemyAIMode ActiveMode => ai.ActiveMode;
+
+    public float MovementTime { get; private set; }
 
     readonly IEnemyAI ai;
     readonly IActorSettings settings;
     readonly ICoroutineRunner runner;
     Coroutine moveCoroutine;
-
-    float moveTime;
 
     public EnemyModel (IEnemyAI ai, IActorSettings settings, ICoroutineRunner runner)
     {
@@ -48,9 +49,10 @@ public class EnemyModel : IEnemyModel
     void HandleActiveModeChanged ()
     {
         if (ai.ActiveMode == EnemyAIMode.Frightened)
-            moveTime = settings.FrightenedMoveTime;
+            MovementTime = settings.FrightenedMoveTime;
         else
-            moveTime = settings.MovementTime;
+            MovementTime = settings.MovementTime;
+        OnActiveModeChanged?.Invoke();
     }
 
     IEnumerator MoveRoutine ()
@@ -60,8 +62,7 @@ public class EnemyModel : IEnemyModel
         {
             delta += Time.deltaTime;
 
-
-            if (delta >= moveTime)
+            if (delta >= MovementTime)
             {
                 delta = 0;
                 ai.Advance();

@@ -12,11 +12,6 @@ public class ActorController : IDisposable
     protected Vector2 originPosition;
     float delta;
 
-    readonly Quaternion up = Quaternion.Euler(new Vector3(0, 0, 90));
-    readonly Quaternion right = Quaternion.Euler(new Vector3(0, 0, 0));
-    readonly Quaternion left = Quaternion.Euler(new Vector3(0, 0, 0));
-    readonly Quaternion down = Quaternion.Euler(new Vector3(0, 0, -90));
-
     public ActorController (IActorModel model, ActorView view)
     {
         this.model = model;
@@ -27,7 +22,6 @@ public class ActorController : IDisposable
         view.transform.position = originPosition;
 
         model.OnPositionChanged += HandlePositionChanged;
-        model.OnDirectionChanged += HandleDirectionChanged;
         model.OnEnableChange += HandleEnableChange;
     }
 
@@ -58,27 +52,9 @@ public class ActorController : IDisposable
         }
     }
 
-    void HandleDirectionChanged ()
-    {
-        view.transform.rotation = model.Direction switch
-        {
-            Direction.Up => up,
-            Direction.Right => right,
-            Direction.Left => left,
-            Direction.Down => down,
-            _ => throw new NotImplementedException()
-        };
-
-        if (model.Direction == Direction.Left)
-            view.transform.localScale = new Vector3(-1, 1, 1);
-        else
-            view.transform.localScale = new Vector3(1, 1, 1);
-    }
-
     public virtual void Dispose ()
     {
         model.OnPositionChanged -= HandlePositionChanged;
-        model.OnDirectionChanged -= HandleDirectionChanged;
         model.OnEnableChange -= HandleEnableChange;
 
         Object.Destroy(view.gameObject);

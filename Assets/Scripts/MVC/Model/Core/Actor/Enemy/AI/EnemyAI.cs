@@ -3,17 +3,13 @@ using UnityEngine;
 
 public class EnemyAI : IEnemyAI
 {
-    public event Action OnActiveModeChanged
-    {
-        add => modeManager.OnActiveModeChanged += value;
-        remove => modeManager.OnActiveModeChanged -= value;
-    }
+    public event Action OnActiveModeChanged;
 
     public EnemyType EnemyType => behavior.EnemyType;
 
     public Vector2Int Position { get; private set; }
     public Direction Direction { get; private set; }
-    public EnemyAIMode ActiveMode => modeManager.ActiveMode;
+    public EnemyAIMode ActiveMode { get; private set; }
 
     readonly IEnemyAIModeManagerModel modeManager;
     readonly IActorModel target;
@@ -21,7 +17,6 @@ public class EnemyAI : IEnemyAI
 
     Vector2Int[] path;
     int node;
-    EnemyAIMode currentMode;
 
     public EnemyAI (
         Vector2Int startingPosition,
@@ -43,10 +38,11 @@ public class EnemyAI : IEnemyAI
 
     public void Advance ()
     {
-        if (currentMode != EnemyAIMode.Dead && currentMode != modeManager.ActiveMode)
+        if (path == null || node == path.Length || ActiveMode == EnemyAIMode.Chase)
+        {
+            SyncActiveModeWithManager();
             RefreshPath();
-        else if (path == null || node == path.Length || modeManager.ActiveMode == EnemyAIMode.Chase)
-            RefreshPath();
+        }
 
         if (path == null || path.Length == 0)
             return;
@@ -65,19 +61,34 @@ public class EnemyAI : IEnemyAI
             Direction = Direction.Down;
     }
 
-    void HandleActiveModeChanged () => RefreshPath();
+    void HandleActiveModeChanged ()
+    {
+        if (ActiveMode == EnemyAIMode.Dead)
+            return;
+
+        SyncActiveModeWithManager();
+        RefreshPath();
+    }
+
+    void SyncActiveModeWithManager ()
+    {
+        ActiveMode = modeManager.ActiveMode;
+        Debug.Log("ActiveMode changed " + ActiveMode);
+        OnActiveModeChanged?.Invoke();
+    }
 
     void RefreshPath ()
     {
-        path = behavior.GetAction(Position, modeManager.ActiveMode, target);
+        path = behavior.GetAction(Position, ActiveMode, target);
         node = 0;
-        currentMode = modeManager.ActiveMode;
     }
 
     public void Die ()
     {
-        currentMode = EnemyAIMode.Dead;
-        path = behavior.GetAction(Position, currentMode, target);
+        ActiveMode = EnemyAIMode.Dead;
+        Debug.Log("ActiveMode changed " + ActiveMode);
+        path = behavior.GetAction(Position, ActiveMode, target);
         node = 0;
+        OnActiveModeChanged?.Invoke();
     }
 }

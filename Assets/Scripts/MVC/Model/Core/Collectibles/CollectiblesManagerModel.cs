@@ -26,7 +26,6 @@ public class CollectiblesManagerModel : ICollectiblesManagerModel
                 {
                     Vector2Int pos = new Vector2Int(x, y);
                     collectibles.Add(pos, collectibleFactory.Create(pos, CollectibleType.Default));
-                    return;
                 }
                 else if (tile == Tile.PowerUp)
                 {

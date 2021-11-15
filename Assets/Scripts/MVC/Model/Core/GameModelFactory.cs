@@ -26,6 +26,7 @@ public class GameModelFactory : IGameModelFactory
             map,
             coroutineRunner,
             actorSettings,
+            gameSettings,
             InputProvider.Instance,
             TimeProvider.Instance
         );

@@ -44,11 +44,12 @@ public class GameModel : IGameModel
 
     void EvaluatePlayerCollision ()
     {
-        if (Enemies != null && Enemies.Any(x => x.Position == Player.Position))
-        {
-            KillPlayer();
+        IEnemyModel enemy = Enemies.FirstOrDefault(x => x.Position == Player.Position);
+
+        if (enemy == null)
             return;
-        }
+
+        HandlePlayerCollisionWithEnemy(enemy);
     }
 
     void EvaluateCollectibles ()
@@ -66,6 +67,14 @@ public class GameModel : IGameModel
     void HandleEnemyPositionChanged (IEnemyModel enemy)
     {
         if (enemy.Position == Player.Position)
+            HandlePlayerCollisionWithEnemy(enemy);
+    }
+
+    void HandlePlayerCollisionWithEnemy (IEnemyModel enemy)
+    {
+        if (Player.HasPowerUp)
+            enemy.Die();
+        else
             KillPlayer();
     }
 
@@ -93,7 +102,6 @@ public class GameModel : IGameModel
     {
         Player.OnPositionChanged -= HandlePlayerPositionChange;
         Player.Dispose();
-        foreach (IEnemyModel enemy in Enemies)
-            enemy.Dispose();
+        enemyManager.Dispose();
     }
 }

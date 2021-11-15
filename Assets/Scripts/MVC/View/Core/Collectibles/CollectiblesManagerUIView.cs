@@ -5,5 +5,5 @@ public class CollectiblesManagerUIView : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI textMeshProUGUI;
 
-    public void SetCollectedCount (int count) => textMeshProUGUI.text = count.ToString();
+    public void SetCollectedCountText (string text) => textMeshProUGUI.text = text;
 }

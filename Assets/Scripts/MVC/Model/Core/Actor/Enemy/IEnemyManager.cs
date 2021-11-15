@@ -1,6 +1,6 @@
 using System;
 
-public interface IEnemyManager
+public interface IEnemyManager : IDisposable
 {
     IEnemyModel[] Enemies { get; }
 
