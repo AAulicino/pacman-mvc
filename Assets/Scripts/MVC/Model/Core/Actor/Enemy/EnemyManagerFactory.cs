@@ -45,7 +45,8 @@ public static class EnemyManagerFactory
                     behavior
                 ),
                 actorSettings,
-                runner
+                runner,
+                TimeProvider.Instance
             );
         }
     }

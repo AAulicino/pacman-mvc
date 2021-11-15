@@ -22,14 +22,20 @@ public class EnemyModel : IEnemyModel
     readonly IEnemyAI ai;
     readonly IActorSettings settings;
     readonly ICoroutineRunner runner;
+    readonly ITimeProvider timeProvider;
     Coroutine moveCoroutine;
 
-    public EnemyModel (IEnemyAI ai, IActorSettings settings, ICoroutineRunner runner)
+    public EnemyModel (
+        IEnemyAI ai,
+        IActorSettings settings,
+        ICoroutineRunner runner,
+        ITimeProvider timeProvider
+    )
     {
         this.ai = ai;
         this.settings = settings;
         this.runner = runner;
-
+        this.timeProvider = timeProvider;
         ai.OnActiveModeChanged += HandleActiveModeChanged;
         HandleActiveModeChanged();
     }
@@ -44,6 +50,12 @@ public class EnemyModel : IEnemyModel
     {
         if (moveCoroutine != null)
             runner.StopCoroutine(moveCoroutine);
+        OnEnableChange?.Invoke(false);
+    }
+
+    public void Die ()
+    {
+        ai.Die();
     }
 
     void HandleActiveModeChanged ()
@@ -60,31 +72,27 @@ public class EnemyModel : IEnemyModel
         float delta = 0;
         while (true)
         {
-            delta += Time.deltaTime;
+            delta += timeProvider.DeltaTime;
 
             if (delta >= MovementTime)
             {
                 delta = 0;
                 ai.Advance();
-                Move(ai.Direction);
+                HandleDirection(ai.Direction);
+                OnPositionChanged?.Invoke();
             }
             yield return null;
         }
     }
 
-    void Move (Direction direction)
+    void HandleDirection (Direction direction)
     {
-        Vector2Int movementDirectionVector = GetMovementDirection(Direction);
-        Vector2Int newPosition = Position + movementDirectionVector;
-
         if (Direction != direction)
         {
             Direction = direction;
-            DirectionVector = movementDirectionVector;
+            DirectionVector = GetMovementDirection(direction);
             OnDirectionChanged?.Invoke();
         }
-
-        OnPositionChanged?.Invoke();
     }
 
     Vector2Int GetMovementDirection (Direction direction)
@@ -97,11 +105,6 @@ public class EnemyModel : IEnemyModel
             Direction.Right => Vector2Int.right,
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null),
         };
-    }
-
-    public void Die ()
-    {
-        ai.Die();
     }
 
     public void Dispose ()

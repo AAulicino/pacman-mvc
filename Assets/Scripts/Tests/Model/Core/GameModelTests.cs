@@ -25,6 +25,15 @@ namespace Tests.Core
             model = new GameModel(map, player, enemyManager, collectiblesManager);
         }
 
+        class Map : GameModelTests
+        {
+            [Test]
+            public void Map_Equals ()
+            {
+                Assert.AreEqual(map, model.Map);
+            }
+        }
+
         class Initialize : GameModelTests
         {
             [Test]

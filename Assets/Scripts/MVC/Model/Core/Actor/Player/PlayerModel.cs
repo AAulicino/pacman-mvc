@@ -59,6 +59,7 @@ public class PlayerModel : IPlayerModel
             runner.StopCoroutine(moveCoroutine);
         if (powerUpCoroutine != null)
             runner.StopCoroutine(powerUpCoroutine);
+        OnEnableChange?.Invoke(false);
     }
 
     IEnumerator MoveRoutine ()
@@ -111,8 +112,11 @@ public class PlayerModel : IPlayerModel
             return;
         }
 
-        Position = newPosition;
-        OnPositionChanged?.Invoke();
+        if (Position != newPosition)
+        {
+            Position = newPosition;
+            OnPositionChanged?.Invoke();
+        }
     }
 
     bool IsMovementValid (Vector2Int position)
@@ -150,7 +154,7 @@ public class PlayerModel : IPlayerModel
 
     void HandleDirection (Vector2Int movementDirectionVector)
     {
-        if (Direction != nextMovement)
+        if (DirectionVector != movementDirectionVector)
         {
             Direction = nextMovement;
             DirectionVector = movementDirectionVector;

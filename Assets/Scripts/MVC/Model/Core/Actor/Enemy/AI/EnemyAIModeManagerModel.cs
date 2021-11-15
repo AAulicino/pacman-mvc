@@ -33,7 +33,9 @@ public class EnemyAIModeManagerModel : IEnemyAIModeManagerModel
     public void TriggerFrightenedMode ()
     {
         if (modeRoutine != null)
-            modeRoutine = runner.StartCoroutine(FrightenedRoutine());
+            runner.StopCoroutine(modeRoutine);
+
+        modeRoutine = runner.StartCoroutine(FrightenedRoutine());
     }
 
     IEnumerator ModeRoutine ()

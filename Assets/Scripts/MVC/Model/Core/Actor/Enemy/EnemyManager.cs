@@ -13,7 +13,6 @@ public class EnemyManager : IEnemyManager
     {
         this.enemies = enemies;
         this.enemyModeManager = enemyModeManager;
-
     }
 
     public void Initialize ()
