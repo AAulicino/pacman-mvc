@@ -42,13 +42,22 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors.Clyde
         bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
         bool InBounds (int x, int y) => x >= 0 && x < map.Width && y >= 0 && y < map.Height;
 
+        class EnemyTypeProperty : ClydeBehaviorTests
+        {
+            [Test]
+            public void Equals_Clyde ()
+            {
+                Assert.AreEqual(EnemyType.Clyde, clyde.EnemyType);
+            }
+        }
+
         class GetAction : ClydeBehaviorTests
         {
             [Test]
             public void Stays_In_Spawn_When_CollectedCount_Smaller_Than_CollectedRequirementRatio ()
             {
                 collectiblesManager.TotalCollectibles.Returns(2);
-                collectiblesManager.CollectedCount.Returns(1);
+                collectiblesManager.CollectedCount.Returns(0);
                 settings.CollectedRequirementRatio.Returns(0.5f);
 
                 clyde.GetAction(Vector2Int.zero, EnemyAIMode.Chase, target);

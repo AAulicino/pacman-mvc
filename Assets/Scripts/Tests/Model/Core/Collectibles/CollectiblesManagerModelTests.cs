@@ -1,3 +1,4 @@
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -62,6 +63,22 @@ namespace Tests.Core.Collectibles
                 model.TryCollect(new Vector2Int(0, 0), out CollectibleType _);
 
                 Assert.AreEqual(1, model.CollectedCount);
+            }
+
+            [Test]
+            public void Collectibles ()
+            {
+                mapModel.Width.Returns(1);
+                mapModel.Height.Returns(1);
+
+                ICollectibleModel expected = Substitute.For<ICollectibleModel>();
+                factory.Create(default, default).ReturnsForAnyArgs(expected);
+
+                mapModel[0, 0].Returns(Tile.Path);
+
+                model.Initialize();
+
+                Assert.AreEqual(expected, model.Collectibles.Single());
             }
         }
 

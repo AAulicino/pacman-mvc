@@ -31,6 +31,7 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors.Inky
             map.Width.Returns(4);
             map.Height.Returns(4);
             map[default, default].Returns(Tile.Path);
+            map.EnemySpawnPoints.Returns(new[] { Vector2Int.zero, Vector2Int.right });
 
             map.InBounds(Arg.Any<Vector2Int>()).Returns(x => InBounds(x.Arg<Vector2Int>()));
             map.InBounds(Arg.Any<int>(), Arg.Any<int>())
@@ -41,6 +42,15 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors.Inky
 
         bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
         bool InBounds (int x, int y) => x >= 0 && x < map.Width && y >= 0 && y < map.Height;
+
+        class EnemyTypeProperty : InkyBehaviorTests
+        {
+            [Test]
+            public void Equals_Inky ()
+            {
+                Assert.AreEqual(EnemyType.Inky, inky.EnemyType);
+            }
+        }
 
         class GetAction : InkyBehaviorTests
         {

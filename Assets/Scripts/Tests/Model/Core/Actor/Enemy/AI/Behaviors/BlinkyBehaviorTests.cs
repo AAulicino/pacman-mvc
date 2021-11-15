@@ -38,6 +38,15 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors.Blinky
         bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
         bool InBounds (int x, int y) => x >= 0 && x < map.Width && y >= 0 && y < map.Height;
 
+        class EnemyTypeProperty : BlinkyBehaviorTests
+        {
+            [Test]
+            public void Equals_Blinky ()
+            {
+                Assert.AreEqual(EnemyType.Blinky, blinky.EnemyType);
+            }
+        }
+
         class GetChaseAction : BlinkyBehaviorTests
         {
             [Test]

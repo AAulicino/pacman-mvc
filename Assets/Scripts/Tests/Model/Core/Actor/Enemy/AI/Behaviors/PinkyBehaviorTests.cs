@@ -38,6 +38,15 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors.Pinky
         bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
         bool InBounds (int x, int y) => x >= 0 && x < map.Width && y >= 0 && y < map.Height;
 
+        class EnemyTypeProperty : PinkyBehaviorTests
+        {
+            [Test]
+            public void Equals_Pinky ()
+            {
+                Assert.AreEqual(EnemyType.Pinky, pinky.EnemyType);
+            }
+        }
+
         class GetChaseAction : PinkyBehaviorTests
         {
             [Test]
