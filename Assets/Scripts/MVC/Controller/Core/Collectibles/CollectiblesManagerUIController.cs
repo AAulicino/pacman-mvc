@@ -19,7 +19,7 @@ public class CollectiblesManagerUIController : IDisposable
 
     void HandleOnCollect (ICollectibleModel collectible)
     {
-        uiView.SetCollectedCountText(model.CollectedCount + " " + model.TotalCollectibles);
+        uiView.SetCollectedCountText(model.CollectedCount + "/" + model.TotalCollectibles);
     }
 
     public void Dispose ()

@@ -69,6 +69,15 @@ namespace Tests.Core.Input
                 model.SetDirection((Direction)(-1));
                 Assert.AreEqual((Direction)(-1), model.GetDirection());
             }
+
+            [Test]
+            public void Raises_OnDirectionChanged ()
+            {
+                bool? raised = null;
+                model.OnDirectionChanged += () => raised = true;
+                model.SetDirection(Direction.Right);
+                Assert.IsTrue(raised);
+            }
         }
     }
 }
