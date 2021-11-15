@@ -10,7 +10,7 @@ public class PinkyBehavior : BaseEnemyAIBehavior
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
         IPinkySettings settings
-    ) : base(map, pathFinder, randomProvider)
+    ) : base(map, pathFinder, randomProvider, settings)
     {
         this.settings = settings;
     }
@@ -19,16 +19,13 @@ public class PinkyBehavior : BaseEnemyAIBehavior
     {
         return mode switch
         {
-            EnemyAIMode.Scatter => GetScatterAction(position, target),
+            EnemyAIMode.Scatter => GetDefaultDeadAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
             EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
             EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
             _ => throw new System.NotImplementedException()
         };
     }
-
-    Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {

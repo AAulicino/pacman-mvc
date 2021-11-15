@@ -26,11 +26,11 @@ public static class EnemyManagerFactory
         );
 
         IEnemyModel inky = CreateEnemyModel(
-            new InkyBehavior(map, pathFinder, random, collectiblesManager, blinky, settings.Inky)
+            new InkyBehavior(map, pathFinder, random, settings.Inky, collectiblesManager, blinky)
         );
 
         IEnemyModel clyde = CreateEnemyModel(
-            new ClydeBehavior(map, pathFinder, random, collectiblesManager, settings.Clyde)
+            new ClydeBehavior(map, pathFinder, random, settings.Clyde, collectiblesManager)
         );
 
         return new EnemyManager(enemyModeManager, blinky, pinky, inky, clyde);

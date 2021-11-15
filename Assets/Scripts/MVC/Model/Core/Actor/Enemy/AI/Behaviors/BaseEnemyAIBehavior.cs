@@ -10,12 +10,19 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
     protected readonly IPathFinder pathFinder;
 
     protected readonly IRandomProvider random;
+    readonly IBaseBehaviorSettings settings;
 
-    protected BaseEnemyAIBehavior (IMapModel map, IPathFinder pathFinder, IRandomProvider random)
+    protected BaseEnemyAIBehavior (
+        IMapModel map,
+        IPathFinder pathFinder,
+        IRandomProvider random,
+        IBaseBehaviorSettings settings
+    )
     {
         this.map = map;
         this.pathFinder = pathFinder;
         this.random = random;
+        this.settings = settings;
     }
 
     public abstract Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target);
@@ -32,25 +39,28 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
         return FindPath(position, GetValidPositionCloseTo(fleeDirection));
     }
 
+    protected Vector2Int[] GetDefaultScatterAction (Vector2Int position, IActorModel target)
+        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
+
     protected Vector2Int GetRandomScatterPosition (ScatterPosition position)
     {
         return GetValidPositionCloseTo(position switch
         {
             ScatterPosition.TopLeft => new Vector2Int(
-                (int)random.Range(0, map.Width / 2),
-                (int)random.Range(map.Height / 2, map.Height)
+                random.Range(0, map.Width / 2),
+                random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.TopRight => new Vector2Int(
-                (int)random.Range(map.Width / 2, map.Width),
-                (int)random.Range(map.Height / 2, map.Height)
+                random.Range(map.Width / 2, map.Width),
+                random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.BottomLeft => new Vector2Int(
-                (int)random.Range(0, map.Width / 2),
-                (int)random.Range(0, map.Height / 2)
+                random.Range(0, map.Width / 2),
+                random.Range(0, map.Height / 2)
             ),
             ScatterPosition.BottomRight => new Vector2Int(
-                (int)random.Range(map.Width / 2, map.Width),
-                (int)random.Range(0, map.Height / 2)
+                random.Range(map.Width / 2, map.Width),
+                random.Range(0, map.Height / 2)
             ),
             _ => throw new NotImplementedException(),
         });

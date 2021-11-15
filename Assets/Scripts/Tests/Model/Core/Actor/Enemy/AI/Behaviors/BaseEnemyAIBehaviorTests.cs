@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
         IMapModel map;
         IPathFinder pathFinder;
         IRandomProvider random;
+        IBaseBehaviorSettings settings;
+
         IActorModel target;
 
         DummyBaseEnemyAIBehavior behavior;
@@ -21,6 +24,7 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
             pathFinder = Substitute.For<IPathFinder>();
             random = Substitute.For<IRandomProvider>();
             target = Substitute.For<IActorModel>();
+            settings = Substitute.For<IBaseBehaviorSettings>();
 
             map.Width.Returns(4);
             map.Height.Returns(4);
@@ -30,7 +34,7 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
             map.InBounds(Arg.Any<int>(), Arg.Any<int>())
                 .Returns(x => InBounds(x.ArgAt<int>(0), x.ArgAt<int>(1)));
 
-            behavior = new DummyBaseEnemyAIBehavior(map, pathFinder, random);
+            behavior = new DummyBaseEnemyAIBehavior(map, pathFinder, random, settings);
         }
 
         bool InBounds (Vector2Int position) => InBounds(position.x, position.y);
@@ -66,13 +70,50 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
 
                 Vector2Int fleeDirection = (Vector2Int.zero - target.Position) * map.Magnitude;
 
-                Vector2Int[] action = behavior.GetDefaultFrightenedAction(Vector2Int.zero, target);
+                behavior.GetDefaultFrightenedAction(Vector2Int.zero, target);
 
                 pathFinder.Received().FindPath(
                     Vector2Int.zero,
                     fleeDirection,
                     TileExtensions.IsEnemyWalkable
                 );
+            }
+        }
+
+        class GetDefaultScatterAction : BaseEnemyAIBehaviorTests
+        {
+            [Test]
+            public void Moves_To_Settings_ScatterPosition ()
+            {
+                settings.ScatterPosition.Returns(ScatterPosition.BottomLeft);
+                target.Position.Returns(Vector2Int.one);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                random.Range(0, expected.x).Returns(expected.x);
+                random.Range(0, expected.y).Returns(expected.y);
+
+                behavior.GetDefaultScatterAction(Vector2Int.zero, target);
+
+                pathFinder.Received().FindPath(
+                    Vector2Int.zero,
+                    expected,
+                    TileExtensions.IsEnemyWalkable
+                );
+            }
+
+            [Test]
+            public void Returns_PathFinder_Path ()
+            {
+                settings.ScatterPosition.Returns(ScatterPosition.BottomLeft);
+                target.Position.Returns(Vector2Int.one);
+
+                pathFinder.FindPath(default, default, default).ReturnsForAnyArgs(
+                    new[] { Vector2Int.right }
+                );
+
+                Vector2Int[] action = behavior.GetDefaultScatterAction(Vector2Int.zero, target);
+
+                Assert.AreEqual(Vector2Int.right, action.Last());
             }
         }
 
@@ -273,14 +314,115 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
 
                 Assert.AreEqual(expected, result);
             }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_Left ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(-1, 0));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_Right ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(1, 0));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_Top ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(0, 1));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_Bottom ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(0, -1));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_TopLeft ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(-1, 1));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_TopRight ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(1, 1));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_BottomLeft ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(-1, -1));
+
+                Assert.AreEqual(expected, result);
+            }
+
+            [Test]
+            public void Returns_Valid_Position_OutOfBounds_BottomRight ()
+            {
+                map.Width.Returns(1);
+                map.Height.Returns(1);
+
+                Vector2Int expected = new Vector2Int(0, 0);
+                Vector2Int result = behavior.GetValidPositionCloseTo(new Vector2Int(1, -1));
+
+                Assert.AreEqual(expected, result);
+            }
         }
 
         class DummyBaseEnemyAIBehavior : BaseEnemyAIBehavior
         {
             public override EnemyType EnemyType => throw new NotImplementedException();
 
-            public DummyBaseEnemyAIBehavior (IMapModel map, IPathFinder pathFinder, IRandomProvider random)
-                : base(map, pathFinder, random)
+            public DummyBaseEnemyAIBehavior (
+                IMapModel map,
+                IPathFinder pathFinder,
+                IRandomProvider random,
+                IBaseBehaviorSettings settings
+            )
+                : base(map, pathFinder, random, settings)
             {
             }
 
@@ -294,6 +436,9 @@ namespace Tests.Core.Actor.Enemy.AI.Behaviors
 
             public new Vector2Int[] GetDefaultFrightenedAction (Vector2Int position, IActorModel target)
                 => base.GetDefaultFrightenedAction(position, target);
+
+            public new Vector2Int[] GetDefaultScatterAction (Vector2Int position, IActorModel target)
+                => base.GetDefaultScatterAction(position, target);
 
             public new Vector2Int GetRandomScatterPosition (ScatterPosition position)
                 => base.GetRandomScatterPosition(position);

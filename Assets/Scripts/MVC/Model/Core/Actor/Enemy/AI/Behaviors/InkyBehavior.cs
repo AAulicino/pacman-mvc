@@ -7,26 +7,43 @@ public class InkyBehavior : BaseEnemyAIBehavior
     readonly IEnemyModel blinky;
     readonly IInkySettings settings;
     readonly ICollectiblesManagerModel collectiblesManager;
+    readonly Bounds spawnBounds;
 
     public InkyBehavior (
         IMapModel map,
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
+        IInkySettings settings,
         ICollectiblesManagerModel collectiblesManager,
-        IEnemyModel blinky,
-        IInkySettings settings
-    ) : base(map, pathFinder, randomProvider)
+        IEnemyModel blinky
+    ) : base(map, pathFinder, randomProvider, settings)
     {
         this.blinky = blinky;
         this.settings = settings;
         this.collectiblesManager = collectiblesManager;
+
+        Vector2Int min = new Vector2Int(int.MaxValue, int.MaxValue);
+        Vector2Int max = new Vector2Int(int.MinValue, int.MinValue);
+
+        for (int i = 0; i < map.EnemySpawnPoints.Count; i++)
+        {
+            min = Vector2Int.Min(min, map.EnemySpawnPoints[i]);
+            max = Vector2Int.Max(max, map.EnemySpawnPoints[i]);
+        }
+
+        Bounds bounds = new Bounds();
+        bounds.SetMinMax((Vector2)min, (Vector2)max);
+        spawnBounds = bounds;
     }
 
     public override Vector2Int[] GetAction (Vector2Int position, EnemyAIMode mode, IActorModel target)
     {
         if (collectiblesManager.CollectedCount < settings.CollectedRequirement)
         {
-            Vector2Int randomPos = new Vector2Int(position.x + Random.Range(-3, 4), position.y);
+            Vector2Int randomPos = new Vector2Int(
+                position.x + Random.Range((int)-spawnBounds.size.x, (int)spawnBounds.size.x),
+                position.y + Random.Range((int)-spawnBounds.size.y, (int)spawnBounds.size.y)
+            );
             return FindPath(
                 position,
                 GetValidPositionCloseTo(randomPos, x => x == Tile.EnemySpawn)
@@ -35,16 +52,13 @@ public class InkyBehavior : BaseEnemyAIBehavior
 
         return mode switch
         {
-            EnemyAIMode.Scatter => GetScatterAction(position, target),
+            EnemyAIMode.Scatter => GetDefaultDeadAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
             EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
             EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
             _ => throw new System.NotImplementedException()
         };
     }
-
-    Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
 
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {

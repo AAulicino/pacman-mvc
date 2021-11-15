@@ -13,10 +13,9 @@ public class ClydeBehavior : BaseEnemyAIBehavior
         IMapModel map,
         IPathFinder pathFinder,
         IRandomProvider randomProvider,
-        ICollectiblesManagerModel collectiblesManager,
-        IClydeSettings settings
-
-    ) : base(map, pathFinder, randomProvider)
+        IClydeSettings settings,
+        ICollectiblesManagerModel collectiblesManager
+    ) : base(map, pathFinder, randomProvider, settings)
     {
         this.collectiblesManager = collectiblesManager;
         this.settings = settings;
@@ -39,7 +38,7 @@ public class ClydeBehavior : BaseEnemyAIBehavior
 
         return mode switch
         {
-            EnemyAIMode.Scatter => GetScatterAction(position, target),
+            EnemyAIMode.Scatter => GetDefaultDeadAction(position, target),
             EnemyAIMode.Chase => GetChaseAction(position, target),
             EnemyAIMode.Frightened => GetDefaultFrightenedAction(position, target),
             EnemyAIMode.Dead => GetDefaultDeadAction(position, target),
@@ -47,14 +46,11 @@ public class ClydeBehavior : BaseEnemyAIBehavior
         };
     }
 
-    Vector2Int[] GetScatterAction (Vector2Int position, IActorModel target)
-        => FindPath(position, GetRandomScatterPosition(settings.ScatterPosition));
-
     Vector2Int[] GetChaseAction (Vector2Int position, IActorModel target)
     {
         if ((target.Position - position).sqrMagnitude > sqrChaseDistance)
             return FindPath(position, target.Position);
 
-        return GetScatterAction(position, target);
+        return GetDefaultScatterAction(position, target);
     }
 }
