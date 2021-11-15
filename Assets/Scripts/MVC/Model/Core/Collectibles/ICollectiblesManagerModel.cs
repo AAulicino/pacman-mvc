@@ -11,5 +11,6 @@ public interface ICollectiblesManagerModel
     int TotalCollectibles { get; }
     int CollectedCount { get; }
 
+    void Initialize ();
     bool TryCollect (Vector2Int position, out CollectibleType type);
 }

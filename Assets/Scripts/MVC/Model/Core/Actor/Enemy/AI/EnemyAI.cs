@@ -16,7 +16,7 @@ public class EnemyAI : IEnemyAI
     readonly IEnemyAIBehavior behavior;
 
     Vector2Int[] path;
-    int node;
+    int nodeIndex;
 
     public EnemyAI (
         Vector2Int startingPosition,
@@ -38,7 +38,7 @@ public class EnemyAI : IEnemyAI
 
     public void Advance ()
     {
-        if (path == null || node == path.Length || ActiveMode == EnemyAIMode.Chase)
+        if (path == null || nodeIndex == path.Length || ActiveMode == EnemyAIMode.Chase)
         {
             SyncActiveModeWithManager();
             RefreshPath();
@@ -48,9 +48,9 @@ public class EnemyAI : IEnemyAI
             return;
 
         Vector2Int previousPosition = Position;
-        Position = path[node++];
+        Position = path[nodeIndex++];
 
-        Vector2Int dir = previousPosition - Position;
+        Vector2Int dir = Position - previousPosition;
         if (dir.x > 0)
             Direction = Direction.Right;
         else if (dir.x < 0)
@@ -79,14 +79,14 @@ public class EnemyAI : IEnemyAI
     void RefreshPath ()
     {
         path = behavior.GetAction(Position, ActiveMode, target);
-        node = 0;
+        nodeIndex = 0;
     }
 
     public void Die ()
     {
         ActiveMode = EnemyAIMode.Dead;
         path = behavior.GetAction(Position, ActiveMode, target);
-        node = 0;
+        nodeIndex = 0;
         OnActiveModeChanged?.Invoke();
     }
 }

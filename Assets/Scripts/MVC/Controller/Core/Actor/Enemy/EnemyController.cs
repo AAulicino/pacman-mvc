@@ -11,6 +11,7 @@ public class EnemyController : ActorController
         this.view = view;
 
         model.OnActiveModeChanged += HandleActiveModeChanged;
+        model.OnDirectionChanged += HandleDirectionChanged;
     }
 
     void HandleActiveModeChanged ()
@@ -28,7 +29,7 @@ public class EnemyController : ActorController
     {
         if (model.Direction == Direction.Left)
             view.transform.localScale = new Vector3(-1, 1, 1);
-        else
+        else if (model.Direction == Direction.Right)
             view.transform.localScale = new Vector3(1, 1, 1);
     }
 

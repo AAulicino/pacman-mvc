@@ -100,9 +100,7 @@ namespace Tests
                 IGameModel gameModel = Substitute.For<IGameModel>();
                 gameModelFactory.Create(default).ReturnsForAnyArgs(gameModel);
 
-                bool? victory = null;
-                model.OnGameEnded += x => victory = x;
-
+                model.StartNewGame();
                 model.StartNewGame();
 
                 gameModel.Received().Dispose();

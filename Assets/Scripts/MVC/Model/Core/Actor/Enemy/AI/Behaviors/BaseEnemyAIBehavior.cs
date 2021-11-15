@@ -37,20 +37,20 @@ public abstract class BaseEnemyAIBehavior : IEnemyAIBehavior
         return GetValidPositionCloseTo(position switch
         {
             ScatterPosition.TopLeft => new Vector2Int(
-                random.Range(0, map.Width / 2),
-                random.Range(map.Height / 2, map.Height)
+                (int)random.Range(0, map.Width / 2),
+                (int)random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.TopRight => new Vector2Int(
-                random.Range(map.Width / 2, map.Width),
-                random.Range(map.Height / 2, map.Height)
+                (int)random.Range(map.Width / 2, map.Width),
+                (int)random.Range(map.Height / 2, map.Height)
             ),
             ScatterPosition.BottomLeft => new Vector2Int(
-                random.Range(0, map.Width / 2),
-                random.Range(0, map.Height / 2)
+                (int)random.Range(0, map.Width / 2),
+                (int)random.Range(0, map.Height / 2)
             ),
             ScatterPosition.BottomRight => new Vector2Int(
-                random.Range(map.Width / 2, map.Width),
-                random.Range(0, map.Height / 2)
+                (int)random.Range(map.Width / 2, map.Width),
+                (int)random.Range(0, map.Height / 2)
             ),
             _ => throw new NotImplementedException(),
         });

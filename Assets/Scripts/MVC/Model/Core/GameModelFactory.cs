@@ -32,6 +32,7 @@ public class GameModelFactory : IGameModelFactory
         );
 
         ICollectiblesManagerModel collectiblesManager = CollectiblesManagerModelFactory.Create(map);
+        collectiblesManager.Initialize();
 
         return new GameModel(
             map,

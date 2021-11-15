@@ -11,6 +11,7 @@ public class CollectiblesManagerController : IDisposable
     {
         this.model = model;
         collectibles = new Dictionary<Vector2Int, CollectibleController>(model.Collectibles.Count);
+
         model.OnCollect += HandleCollectibleCollected;
     }
 
